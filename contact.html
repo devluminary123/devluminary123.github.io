@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dev Luminary — creative web development, UI and motion.">
+  <title>Dev Luminary — Contact</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="site-nav" id="site-nav">
+    <a href="index.html" class="logo" aria-label="Dev Luminary home">
+      <span class="logo-mark" aria-hidden="true"><span></span></span>
+      <span class="logo-copy"><small>CREATIVE WEB</small><strong>DEV <b>LUMINARY</b></strong></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <span class="nav-orbit" aria-hidden="true"></span>
+      <a href="index.html" class=""><span class="icon" aria-hidden="true">⌂</span><span>Home</span></a>
+      <a href="work.html" class=""><span class="icon" aria-hidden="true">✦</span><span>Work</span></a>
+      <a href="skills.html" class=""><span class="icon" aria-hidden="true">&lt;/&gt;</span><span>Skills</span></a>
+      <a href="contact.html" class="active"><span class="icon" aria-hidden="true">◌</span><span>Contact</span><i
+          class="nav-active-dot"></i></a>
+    </nav>
+    <a href="contact.html" class="hire magnetic-border"><span class="icon" aria-hidden="true">▣</span><span>Start a
+        project</span>↗</a>
+    <button class="mobile-menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+    <div class="mobile-menu" hidden>
+      <div class="mobile-menu-glow"></div>
+      <span class="mobile-menu-label">NAVIGATION / 004</span>
+      <a href="index.html" class=""><span
+          class="mobile-index">01</span><span>⌂</span><span>Home</span><span>↗</span></a><a href="work.html"
+        class=""><span class="mobile-index">02</span><span>✦</span><span>Work</span><span>↗</span></a><a
+        href="skills.html" class=""><span
+          class="mobile-index">03</span><span>&lt;/&gt;</span><span>Skills</span><span>↗</span></a><a
+        href="contact.html" class="active"><span
+          class="mobile-index">04</span><span>◌</span><span>Contact</span><span>↗</span></a>
+      <a href="contact.html" class="mobile-cta"><span>Let’s build something</span>↗</a>
+    </div>
+  </header>
+  <main id="top" class="contact-page">
+    <div class="eyebrow">CONTACT / HIRE</div>
+    <h1>Let's build<br><em>something great.</em></h1>
+    <p class="lead">Choose a channel below, or shape a project brief you can copy and send wherever you already talk to
+      your team.</p>
+    <div class="contact-grid">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dev.luminary123@gmail.com" target="_blank" rel="noreferrer"
+        class="contact-item">
+        <span style="color:hsl(var(--primary))">✉</span>
+        <small>EMAIL</small>
+        <b>dev.luminary123@gmail.com ↗</b>
+      </a>
+      <a href="https://www.instagram.com/dev.luminary/" target="_blank" rel="noreferrer" class="contact-item"><span
+          style="color:hsl(var(--accent))">◎</span><small>INSTAGRAM</small><b>dev.luminary ↗</b></a>
+      <a href="https://t.me/DevLuminary" target="_blank" rel="noreferrer" class="contact-item"><span
+          style="color:hsl(var(--primary))">➤</span><small>TELEGRAM</small><b>DevLuminary ↗</b></a>
+      <a href="https://discord.com/users/1420398170420285450" target="_blank" rel="noreferrer"
+        class="contact-item"><span style="color:hsl(var(--accent))">◌</span><small>DISCORD</small><b>dev.luminary
+          ↗</b></a>
+    </div>
+    <form class="project-note" id="project-form">
+      <div class="note-heading"><small>PROJECT BRIEF / COPY MODE</small><span>Copy it. Drop it anywhere.</span></div>
+      <div class="form-row">
+        <div class="form-field"><label for="project-name">YOUR NAME</label><input id="project-name"
+            placeholder="Your name"></div>
+      </div>
+      <label class="sr-only" for="project-message">Project message</label><textarea
+        id="project-message">Hi Dev Luminary! I want to discuss a website project.</textarea>
+      <div class="form-error" id="form-error" hidden></div>
+      <div class="success-note" id="success-note" hidden>✓ Brief copied. Paste it into Instagram, Telegram, Discord, or
+        your preferred channel.</div>
+      <button class="primary" type="submit" id="copy-project">▣ Copy Project Brief</button>
+    </form>
+  </main>
+  <footer><span>© 2026 DEV LUMINARY</span><span>HTML · CSS · JS · REACT · NEXT.JS</span><a href="#top">BACK TO TOP ↑</a>
+  </footer>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
