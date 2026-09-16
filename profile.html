@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta name="author" content="Dev Luminary"><meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="48x48" href="images/logo.png"><link rel="stylesheet" href="style.css">
+<title>Dev Luminary | My Profile</title>
+</head>
+<body><header class="site-nav" id="site-nav">
+<a href="index.html" class="logo" aria-label="Dev Luminary home"><img src="images/logo.png" alt="Dev Luminary logo"><span class="logo-copy"><small>CREATIVE WEB</small><strong>DEV <b>LUMINARY</b></strong></span></a>
+<nav class="desktop-nav"><a href="index.html" class=""><span>⌂</span> Home</a><a href="preview.html" class=""><span>◈</span> Preview</a><a href="skills.html" class=""><span></></span> Skills</a><a href="contact.html" class=""><span>✦</span> Contact</a></nav>
+<div class="nav-actions"><button class="icon-btn" id="theme-toggle" title="Toggle theme">☼</button><a class="login-btn" href="auth.html">Sign In</a><span class="user-pill" id="user-pill">● <a id="user-pill-link" href="profile.html"><b id="user-email"></b></a><button class="icon-btn" id="logout" title="Sign out">×</button></span></div>
+<button class="mobile-menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+<div class="mobile-menu" hidden><a href="index.html" class=""><span>01</span><span>⌂</span><span>Home</span><span>↗</span></a><a href="preview.html" class=""><span>02</span><span>◈</span><span>Preview</span><span>↗</span></a><a href="skills.html" class=""><span>03</span><span></></span><span>Skills</span><span>↗</span></a><a href="contact.html" class=""><span>04</span><span>✦</span><span>Contact</span><span>↗</span></a><a class="mobile-cta" href="auth.html"><span>→</span><span>◉</span><span>Sign In / Sign Up</span><span>↗</span></a></div>
+</header>
+
+<main>
+<section style="padding-top:160px" id="profile-loading">
+  <div class="eyebrow">ACCOUNT</div>
+  <h1 style="font-size:clamp(40px,6vw,72px);line-height:.95;margin:18px 0">Checking your session…</h1>
+  <p class="lead">Hang tight — verifying you're signed in.</p>
+</section>
+
+<section class="hidden" id="profile-content" style="padding-top:160px">
+  <div class="eyebrow">ACCOUNT</div>
+  <h1 style="font-size:clamp(40px,6vw,72px);line-height:.95;margin:18px 0">My <em>Profile.</em></h1>
+
+  <div class="profile-grid">
+    <div class="profile-card">
+      <div class="profile-avatar" id="profile-avatar">DL</div>
+      <h3 id="view-display-name" style="margin:16px 0 2px"></h3>
+      <p id="view-username" style="color:var(--primary);margin:0 0 14px"></p>
+      <div class="profile-meta">
+        <div><small>EMAIL</small><span id="view-email"></span></div>
+        <div><small>MEMBER SINCE</small><span id="view-created"></span></div>
+      </div>
+      <p id="view-bio" style="color:var(--muted);line-height:1.6;margin-top:16px"></p>
+    </div>
+
+    <form class="form-card" id="profile-form" style="margin:0">
+      <div class="field"><label>DISPLAY NAME</label><input id="edit-display-name" maxlength="60"></div>
+      <div class="field"><label>USERNAME</label><input id="edit-username" maxlength="20"><small class="field-hint">3–20 characters: letters, numbers, underscore.</small></div>
+      <div class="field"><label>BIO</label><textarea id="edit-bio" maxlength="240" placeholder="Tell people a little about yourself..."></textarea></div>
+      <div class="field"><label>AVATAR URL</label><input id="edit-avatar" placeholder="https://example.com/your-photo.jpg"><small class="field-hint">Paste a link to an image. (Direct upload can be added later via Supabase Storage.)</small></div>
+      <p class="auth-msg" id="profile-msg" role="status" aria-live="polite"></p>
+      <button class="primary" type="submit" style="width:100%">Save Changes</button>
+    </form>
+  </div>
+</section>
+</main>
+<footer><span>© 2026 DEV LUMINARY</span><span>ACCOUNT</span><a href="#top">BACK TO TOP ↑</a></footer>
+<div class="toast"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js" defer></script>
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s);
+  let currentUser=null;
+
+  function initials(name){
+    return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  }
+
+  function paint(user, profile){
+    $('#view-display-name').textContent = profile.display_name || user.email;
+    $('#view-username').textContent = profile.username ? '@'+profile.username : '';
+    $('#view-email').textContent = user.email;
+    $('#view-created').textContent = new Date(user.created_at).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    $('#view-bio').textContent = profile.bio || 'No bio yet — add one below.';
+    const avatarEl = $('#profile-avatar');
+    if(profile.avatar_url){
+      avatarEl.style.backgroundImage = `url(${profile.avatar_url})`;
+      avatarEl.textContent='';
+    } else {
+      avatarEl.style.backgroundImage='';
+      avatarEl.textContent = initials(profile.display_name || profile.username || user.email);
+    }
+    $('#edit-display-name').value = profile.display_name || '';
+    $('#edit-username').value = profile.username || '';
+    $('#edit-bio').value = profile.bio || '';
+    $('#edit-avatar').value = profile.avatar_url || '';
+  }
+
+  async function boot(){
+    const session = await DLAuth.requireAuth('auth.html');
+    if(!session) return; // requireAuth already redirected
+    currentUser = session.user;
+    let profile;
+    try{
+      profile = await DLAuth.getProfile(currentUser.id);
+    } catch(e){
+      profile = { username:'', display_name:'', bio:'', avatar_url:'' };
+    }
+    paint(currentUser, profile);
+    $('#profile-loading').classList.add('hidden');
+    $('#profile-content').classList.remove('hidden');
+  }
+
+  $('#profile-form').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const msg=$('#profile-msg'), btn=e.target.querySelector('button[type=submit]');
+    msg.textContent=''; msg.style.color='var(--muted)';
+    const original=btn.textContent;
+    btn.textContent='Saving...'; btn.disabled=true;
+    try{
+      const updated = await DLAuth.updateProfile(currentUser.id, {
+        display_name: $('#edit-display-name').value,
+        username: $('#edit-username').value,
+        bio: $('#edit-bio').value,
+        avatar_url: $('#edit-avatar').value,
+      });
+      paint(currentUser, updated);
+      msg.style.color='#6fffe9';
+      msg.textContent='Profile updated.';
+    } catch(err){
+      msg.style.color='#ff6b8a';
+      msg.textContent = err.message || 'Could not save changes. Please try again.';
+    } finally {
+      btn.textContent=original; btn.disabled=false;
+    }
+  });
+
+  boot();
+})();
+</script>
+</body></html>

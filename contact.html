@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta name="keywords" content="Dev Luminary, web developer, websites, UI, JavaScript, CSS, portfolio">
+<meta name="author" content="Dev Luminary"><meta name="robots" content="index, follow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Dev Luminary">
+<meta property="og:title" content="Dev Luminary | Contact"><meta property="og:description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta property="og:image" content="images/logo.png"><meta property="og:url" content="https://devluminary123.github.io/">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Dev Luminary | Contact">
+<meta name="twitter:description" content="Dev Luminary — premium web development, UI, animations and digital experiences."><meta name="twitter:image" content="images/logo.png">
+<link rel="icon" type="image/png" sizes="48x48" href="images/logo.png"><link rel="stylesheet" href="style.css">
+</head>
+<body><header class="site-nav" id="site-nav">
+<a href="index.html" class="logo" aria-label="Dev Luminary home"><img src="images/logo.png" alt="Dev Luminary logo"><span class="logo-copy"><small>CREATIVE WEB</small><strong>DEV <b>LUMINARY</b></strong></span></a>
+<nav class="desktop-nav"><a href="index.html" class=""><span>⌂</span> Home</a><a href="preview.html" class=""><span>◈</span> Preview</a><a href="skills.html" class=""><span></></span> Skills</a><a href="contact.html" class="active"><span>✦</span> Contact</a></nav>
+<div class="nav-actions"><button class="icon-btn" id="theme-toggle" title="Toggle theme">☼</button><a class="login-btn" href="auth.html">Sign In</a><span class="user-pill" id="user-pill">● <a id="user-pill-link" href="profile.html"><b id="user-email"></b></a><button class="icon-btn" id="logout" title="Sign out">×</button></span></div>
+<button class="mobile-menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+<div class="mobile-menu" hidden><a href="index.html" class=""><span>01</span><span>⌂</span><span>Home</span><span>↗</span></a><a href="preview.html" class=""><span>02</span><span>◈</span><span>Preview</span><span>↗</span></a><a href="skills.html" class=""><span>03</span><span></></span><span>Skills</span><span>↗</span></a><a href="contact.html" class="active"><span>04</span><span>✦</span><span>Contact</span><span>↗</span></a><a class="mobile-cta" href="auth.html"><span>→</span><span>◉</span><span>Sign In / Sign Up</span><span>↗</span></a></div>
+</header><main><section style="padding-top:160px"><div class="eyebrow">CONTACT / HIRE</div><h1 style="font-size:clamp(52px,7vw,92px);line-height:.9;margin:18px 0">Let's build<br><em>something great.</em></h1><p class="lead">Choose a direct channel or send a project brief. The links below use the contact details already configured in your original contact page.</p>
+<div class="contact-grid stagger">
+<a class="contact-item reveal" href="https://mail.google.com/mail/?view=cm&fs=1&to=dev.luminary123@gmail.com" target="_blank" rel="noreferrer"><span>✉</span><small>EMAIL</small><b>dev.luminary123@gmail.com ↗</b></a>
+<a class="contact-item reveal" href="https://www.instagram.com/dev.luminary/" target="_blank" rel="noreferrer"><span>◎</span><small>INSTAGRAM</small><b>@devluminary ↗</b></a>
+<a class="contact-item reveal" href="https://t.me/DevLuminary" target="_blank" rel="noreferrer"><span>➤</span><small>TELEGRAM</small><b>DevLuminary ↗</b></a>
+<a class="contact-item reveal" href="https://discord.com/users/1420398170420285450" target="_blank" rel="noreferrer"><span>◌</span><small>DISCORD</small><b>dev.luminary ↗</b></a>
+</div>
+<form class="form-card reveal" id="contact-form"><div class="field"><label>YOUR NAME</label><input id="name" required placeholder="Your name"></div><div class="field"><label>EMAIL</label><input id="contact-email" type="email" required placeholder="you@example.com"></div><div class="field"><label>PROJECT</label><textarea id="message" required placeholder="Tell me what you want to build..."></textarea></div><button class="primary" type="submit">Send Project Brief ↗</button></form>
+</section></main><footer><span>© 2026 DEV LUMINARY</span><span>DIRECT CONTACT</span><a href="#top">BACK TO TOP ↑</a></footer><div class="toast"></div><script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js" defer></script></body></html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta name="keywords" content="Dev Luminary, web developer, websites, UI, JavaScript, CSS, portfolio">
+<meta name="author" content="Dev Luminary"><meta name="robots" content="noindex">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Dev Luminary">
+<meta property="og:title" content="Dev Luminary | Sign In & Sign Up"><meta property="og:description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta property="og:image" content="images/logo.png"><meta property="og:url" content="https://devluminary123.github.io/">
+<title>Dev Luminary | Sign In &amp; Sign Up</title>
+<link rel="icon" type="image/png" sizes="48x48" href="images/logo.png"><link rel="stylesheet" href="style.css">
+</head>
+<body><header class="site-nav" id="site-nav">
+<a href="index.html" class="logo" aria-label="Dev Luminary home"><img src="images/logo.png" alt="Dev Luminary logo"><span class="logo-copy"><small>CREATIVE WEB</small><strong>DEV <b>LUMINARY</b></strong></span></a>
+<nav class="desktop-nav"><a href="index.html" class=""><span>⌂</span> Home</a><a href="preview.html" class=""><span>◈</span> Preview</a><a href="skills.html" class=""><span></></span> Skills</a><a href="contact.html" class=""><span>✦</span> Contact</a></nav>
+<div class="nav-actions"><button class="icon-btn" id="theme-toggle" title="Toggle theme">☼</button><a class="login-btn" href="auth.html">Sign In</a><span class="user-pill" id="user-pill">● <a id="user-pill-link" href="profile.html"><b id="user-email"></b></a><button class="icon-btn" id="logout" title="Sign out">×</button></span></div>
+<button class="mobile-menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+<div class="mobile-menu" hidden><a href="index.html" class=""><span>01</span><span>⌂</span><span>Home</span><span>↗</span></a><a href="preview.html" class=""><span>02</span><span>◈</span><span>Preview</span><span>↗</span></a><a href="skills.html" class=""><span>03</span><span></></span><span>Skills</span><span>↗</span></a><a href="contact.html" class=""><span>04</span><span>✦</span><span>Contact</span><span>↗</span></a><a class="mobile-cta" href="auth.html"><span>→</span><span>◉</span><span>Sign In / Sign Up</span><span>↗</span></a></div>
+</header>
+<main class="auth-wrap"><section class="auth-card">
+<div class="eyebrow">MEMBER ACCESS</div>
+<h1 id="auth-title" style="font-size:42px;margin:14px 0 8px">Welcome back</h1>
+<p class="lead" style="font-size:14px" id="auth-subtitle">Sign in is optional. Preview and contact pages work without an account.</p>
+
+<div class="auth-tabs" id="auth-tabs"><button data-mode="signin" class="active">Sign In</button><button data-mode="signup">Sign Up</button></div>
+
+<!-- SIGN IN / SIGN UP FORM -->
+<form id="auth-form">
+  <div class="field hidden" id="field-username"><label>USERNAME</label><input id="username" type="text" autocomplete="username" placeholder="yourname" maxlength="20"><small class="field-hint">3–20 characters: letters, numbers, underscore.</small></div>
+  <div class="field hidden" id="field-display-name"><label>DISPLAY NAME</label><input id="display-name" type="text" autocomplete="name" placeholder="Jordan Lee" maxlength="60"></div>
+  <div class="field"><label>EMAIL</label><input id="email" type="email" autocomplete="email" required placeholder="Enter your email"></div>
+  <div class="field">
+    <label>PASSWORD</label>
+    <div class="pw-wrap">
+      <input id="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+      <button type="button" class="pw-toggle" data-toggle-for="password" aria-label="Show password">👁</button>
+    </div>
+    <div class="password-meter hidden" id="password-meter-wrap"><i id="password-meter"></i></div>
+    <small class="field-hint hidden" id="password-hint">Minimum 8 characters.</small>
+  </div>
+  <div class="field hidden" id="confirm-field">
+    <label>CONFIRM PASSWORD</label>
+    <div class="pw-wrap">
+      <input id="confirm-password" type="password" autocomplete="new-password" placeholder="Re-enter your password">
+      <button type="button" class="pw-toggle" data-toggle-for="confirm-password" aria-label="Show password">👁</button>
+    </div>
+  </div>
+  <div class="field-row-inline" id="remember-row">
+    <label class="check-label"><input type="checkbox" id="remember-me" checked> Remember me</label>
+    <button type="button" class="link-btn" id="forgot-link">Forgot password?</button>
+  </div>
+  <p class="auth-msg" id="auth-msg" role="status" aria-live="polite"></p>
+  <button class="primary" id="auth-submit" type="submit" style="width:100%">Sign In</button>
+</form>
+
+<!-- FORGOT PASSWORD FORM -->
+<form id="forgot-form" class="hidden">
+  <div class="field"><label>EMAIL</label><input id="forgot-email" type="email" autocomplete="email" required placeholder="Enter your account email"></div>
+  <p class="auth-msg" id="forgot-msg" role="status" aria-live="polite"></p>
+  <button class="primary" id="forgot-submit" type="submit" style="width:100%">Send Reset Link</button>
+  <button type="button" class="link-btn" id="back-to-signin" style="margin-top:14px">← Back to Sign In</button>
+</form>
+
+<p style="color:var(--muted);font-size:11px;line-height:1.6;margin-top:20px">Accounts are powered by Supabase Authentication. Your password is never stored or seen by this website — Supabase handles it securely, and this page only ever talks to Supabase over an encrypted connection.</p>
+</section></main>
+<div class="toast"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js" defer></script>
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s);
+  const tabs=[...document.querySelectorAll('#auth-tabs button')];
+  const authForm=$('#auth-form'), forgotForm=$('#forgot-form');
+  const title=$('#auth-title'), subtitle=$('#auth-subtitle'), submit=$('#auth-submit'), msg=$('#auth-msg');
+  const usernameField=$('#field-username'), displayField=$('#field-display-name'), confirmField=$('#confirm-field');
+  const meterWrap=$('#password-meter-wrap'), meter=$('#password-meter'), pwHint=$('#password-hint');
+  const rememberRow=$('#remember-row');
+  let mode='signin';
+
+  function params(){ return new URLSearchParams(location.search) }
+  function redirectTarget(){ return params().get('redirect') || 'index.html' }
+
+  function setMode(next){
+    mode=next;
+    tabs.forEach(b=>b.classList.toggle('active', b.dataset.mode===next));
+    usernameField.classList.toggle('hidden', next==='signin');
+    displayField.classList.toggle('hidden', next==='signin');
+    confirmField.classList.toggle('hidden', next==='signin');
+    meterWrap.classList.toggle('hidden', next==='signin');
+    pwHint.classList.toggle('hidden', next==='signin');
+    rememberRow.style.display = next==='signin' ? 'flex' : 'none';
+    $('#username').required = next==='signup';
+    $('#display-name').required = false;
+    $('#confirm-password').required = next==='signup';
+    title.textContent = next==='signin' ? 'Welcome back' : 'Create your account';
+    submit.textContent = next==='signin' ? 'Sign In' : 'Create Account';
+    subtitle.textContent = next==='signin'
+      ? 'Sign in is optional. Preview and contact pages work without an account.'
+      : 'Pick a username, set a password (8+ characters) and you\'re in.';
+    msg.textContent='';
+  }
+  tabs.forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+
+  // show/hide password
+  document.querySelectorAll('.pw-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const input=$('#'+btn.dataset.toggleFor);
+      const showing=input.type==='text';
+      input.type=showing?'password':'text';
+      btn.textContent=showing?'👁':'🙈';
+    });
+  });
+
+  // password strength meter (visual only — never blocks submission)
+  $('#password').addEventListener('input', e=>{
+    if(mode!=='signup')return;
+    const s=DLAuth.passwordScore(e.target.value);
+    const widths=['4%','20%','40%','60%','80%','100%'];
+    const colors=['#ff6b8a','#ff6b8a','#ffb054','#ffc857','#9be27a','#6fffe9'];
+    meter.style.width=widths[s];
+    meter.style.background=colors[s];
+  });
+
+  function setLoading(btn, loadingText, isLoading){
+    if(isLoading){ btn.dataset.label=btn.textContent; btn.textContent=loadingText; btn.disabled=true; }
+    else { btn.textContent=btn.dataset.label||btn.textContent; btn.disabled=false; }
+  }
+
+  authForm.addEventListener('submit', async e=>{
+    e.preventDefault();
+    msg.style.color='var(--muted)';
+    msg.textContent='';
+    const email=$('#email').value, password=$('#password').value;
+    try{
+      if(mode==='signup'){
+        const confirm=$('#confirm-password').value;
+        if(password!==confirm){ msg.style.color='#ff6b8a'; msg.textContent='Passwords do not match.'; return; }
+        setLoading(submit,'Creating account...',true);
+        await DLAuth.signUp({email,password,username:$('#username').value,displayName:$('#display-name').value});
+        msg.style.color='#6fffe9';
+        msg.textContent='Account created! Please check your email to verify your account before signing in.';
+        authForm.reset();
+        setMode('signin');
+      } else {
+        setLoading(submit,'Signing in...',true);
+        await DLAuth.signIn({email,password,remember:$('#remember-me').checked});
+        submit.textContent='Signed in!';
+        setTimeout(()=>{ location.href = redirectTarget(); }, 500);
+        return;
+      }
+    } catch(err){
+      msg.style.color='#ff6b8a';
+      msg.textContent = err.message || 'Something went wrong. Please try again.';
+    } finally {
+      setLoading(submit, submit.textContent, false);
+    }
+  });
+
+  // forgot password flow
+  $('#forgot-link').addEventListener('click', ()=>{
+    authForm.classList.add('hidden'); forgotForm.classList.remove('hidden');
+    document.querySelector('#auth-tabs').classList.add('hidden');
+    title.textContent='Reset your password';
+    subtitle.textContent="We'll email you a secure link to set a new password.";
+    $('#forgot-email').value = $('#email').value;
+  });
+  $('#back-to-signin').addEventListener('click', ()=>{
+    forgotForm.classList.add('hidden'); authForm.classList.remove('hidden');
+    document.querySelector('#auth-tabs').classList.remove('hidden');
+    setMode('signin');
+  });
+  forgotForm.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fmsg=$('#forgot-msg'), fbtn=$('#forgot-submit');
+    fmsg.textContent='';
+    try{
+      setLoading(fbtn,'Sending...',true);
+      await DLAuth.resetPassword($('#forgot-email').value);
+      fmsg.style.color='#6fffe9';
+      fmsg.textContent='Reset link sent — check your email inbox (and spam folder).';
+    } catch(err){
+      fmsg.style.color='#ff6b8a';
+      fmsg.textContent = err.message || 'Something went wrong. Please try again.';
+    } finally {
+      setLoading(fbtn, fbtn.textContent, false);
+    }
+  });
+
+  // if already signed in, bounce straight to the redirect target / home
+  (async ()=>{
+    const session = await DLAuth.getCurrentSession();
+    if(session) location.replace(redirectTarget());
+  })();
+
+  setMode('signin');
+})();
+</script>
+</body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta name="keywords" content="Dev Luminary, web developer, websites, UI, JavaScript, CSS, portfolio">
+<meta name="author" content="Dev Luminary"><meta name="robots" content="index, follow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Dev Luminary">
+<meta property="og:title" content="Dev Luminary | Web Developer"><meta property="og:description" content="Dev Luminary — premium web development, UI, animations and digital experiences.">
+<meta property="og:image" content="images/logo.png"><meta property="og:url" content="https://devluminary123.github.io/">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Dev Luminary | Web Developer">
+<meta name="twitter:description" content="Dev Luminary — premium web development, UI, animations and digital experiences."><meta name="twitter:image" content="images/logo.png">
+<link rel="icon" type="image/png" sizes="48x48" href="images/logo.png"><link rel="stylesheet" href="style.css">
+</head>
+<body><header class="site-nav" id="site-nav">
+<a href="index.html" class="logo" aria-label="Dev Luminary home"><img src="images/logo.png" alt="Dev Luminary logo"><span class="logo-copy"><small>CREATIVE WEB</small><strong>DEV <b>LUMINARY</b></strong></span></a>
+<nav class="desktop-nav"><a href="index.html" class="active"><span>⌂</span> Home</a><a href="preview.html" class=""><span>◈</span> Preview</a><a href="skills.html" class=""><span></></span> Skills</a><a href="contact.html" class=""><span>✦</span> Contact</a></nav>
+<div class="nav-actions"><button class="icon-btn" id="theme-toggle" title="Toggle theme">☼</button><a class="login-btn" href="auth.html">Sign In</a><span class="user-pill" id="user-pill">● <a id="user-pill-link" href="profile.html"><b id="user-email"></b></a><button class="icon-btn" id="logout" title="Sign out">×</button></span></div>
+<button class="mobile-menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+<div class="mobile-menu" hidden><a href="index.html" class="active"><span>01</span><span>⌂</span><span>Home</span><span>↗</span></a><a href="preview.html" class=""><span>02</span><span>◈</span><span>Preview</span><span>↗</span></a><a href="skills.html" class=""><span>03</span><span></></span><span>Skills</span><span>↗</span></a><a href="contact.html" class=""><span>04</span><span>✦</span><span>Contact</span><span>↗</span></a><a class="mobile-cta" href="auth.html"><span>→</span><span>◉</span><span>Sign In / Sign Up</span><span>↗</span></a></div>
+</header>
+<main>
+<section class="hero">
+<div class="hero-content"><div class="eyebrow">WEB DEVELOPER · UI · MOTION</div>
+<h1>Digital work that<br><em>feels alive.</em></h1>
+<p>I design and build fast, responsive websites for businesses, creators, communities and modern digital products — with polished interactions and memorable visual systems.</p>
+<div class="actions"><a class="primary" href="preview.html">Preview Websites ↗</a><a class="secondary" href="contact.html">Start a Project</a></div></div>
+<div class="hero-visual"><div class="orbit"><span class="orbit-dot"></span></div><img class="hero-logo" src="images/logo.png" alt="Dev Luminary"></div>
+</section>
+<section><div class="section-head"><div><div class="eyebrow">01 / SERVICES</div><h2>Built for <span>real goals.</span></h2></div><p>From a professional business site to a Discord bot dashboard, every build gets responsive UI, animation and clear structure.</p></div>
+<div class="service-grid stagger">
+<div class="service reveal"><small>01</small><h3>Business Websites</h3><p>Professional websites for brands, shops, services and local businesses.</p></div>
+<div class="service reveal"><small>02</small><h3>Discord Bot Sites</h3><p>Landing pages, command docs, support pages and dashboards for bots and communities.</p></div>
+<div class="service reveal"><small>03</small><h3>Landing Pages</h3><p>High-impact product, creator and campaign pages focused on conversion.</p></div>
+<div class="service reveal"><small>04</small><h3>Animated UI</h3><p>Scroll reveals, hover systems, particles, glass effects and micro-interactions.</p></div>
+<div class="service reveal"><small>05</small><h3>Portfolio Websites</h3><p>Personal brands that show your work without looking like a generic template.</p></div>
+<div class="service reveal"><small>06</small><h3>Redesigns</h3><p>Modernize an existing site with a cleaner visual system and better UX.</p></div>
+</div></section>
+<section><div class="section-head"><div><div class="eyebrow">02 / PREVIEW</div><h2>See the <span>experience.</span></h2></div><a class="secondary" href="preview.html">Open Preview Lab ↗</a></div>
+<div class="grid stagger">
+<div class="card reveal"><span class="number">01 / BUSINESS</span><h3>Nova Business</h3><p>Elegant company homepage with services, trust blocks and animated hero.</p><span class="tag">Dark</span><span class="tag">Premium</span></div>
+<div class="card reveal"><span class="number">02 / DISCORD</span><h3>ModsX Bot</h3><p>Community-focused bot website with commands, stats, invite and support flow.</p><span class="tag">Neon</span><span class="tag">Community</span></div>
+<div class="card reveal"><span class="number">03 / CREATOR</span><h3>Creator Studio</h3><p>Creator landing page with social proof, projects and animated profile UI.</p><span class="tag">Glass</span><span class="tag">Motion</span></div>
+</div></section>
+<section><div class="section-head"><div><div class="eyebrow">03 / CONTACT</div><h2>Let's make something <span>memorable.</span></h2></div><p>Use the contact page for direct email, Instagram, Telegram or Discord.</p></div>
+<div class="actions"><a class="primary" href="contact.html">Contact Dev Luminary ↗</a><a class="secondary" href="auth.html">Sign In / Sign Up</a></div></section>
+</main>
+<footer><span>© 2026 DEV LUMINARY</span><span>HTML · CSS · JS · RESPONSIVE UI</span><a href="#top">BACK TO TOP ↑</a></footer>
+<div class="toast"></div><script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="script.js" defer></script></body></html>
