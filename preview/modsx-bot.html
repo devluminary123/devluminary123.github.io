@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ModsX — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#070a0d;--bg2:#0c1116;--card:rgba(15,22,27,.78);--text:#e9fbf5;--muted:#8aa3a0;
+  --line:rgba(111,255,214,.14);--primary:#5be8b5;--primary2:#5865f2;--accent:#ff5b9c;
+  --radius:18px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#f2fbf8;--bg2:#e6f6f0;--card:rgba(255,255,255,.85);--text:#0c1c18;--muted:#4d6a63;--line:rgba(12,28,24,.12)}
+body{background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--primary2) 24%,transparent),transparent 30%),radial-gradient(circle at 0% 45%,color-mix(in srgb,var(--primary) 18%,transparent),transparent 30%),var(--bg)}
+
+.mx-nav{position:sticky;top:52px;z-index:90;padding:15px 0;background:color-mix(in srgb,var(--bg) 75%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.mx-nav .wrap{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px}
+.mx-logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}
+.mx-logo .av{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--primary2),var(--primary));display:grid;place-items:center;font-size:16px;box-shadow:0 0 22px color-mix(in srgb,var(--primary) 50%,transparent);animation:mx-pulse 2.6s ease-in-out infinite}
+@keyframes mx-pulse{50%{box-shadow:0 0 34px color-mix(in srgb,var(--primary) 75%,transparent)}}
+.mx-links{display:flex;gap:4px;margin:auto}
+.mx-links a{padding:9px 13px;border-radius:10px;color:var(--muted);font-size:13.5px}
+.mx-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.mx-burger{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);font-size:18px}
+.mx-mobile{position:fixed;top:0;right:-100%;height:100%;width:min(300px,84vw);z-index:250;background:var(--bg2);border-left:1px solid var(--line);padding:80px 22px 22px;transition:right .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:6px}
+.mx-mobile.open{right:0}
+.mx-mobile a{padding:14px;border-radius:12px;color:var(--text);border-bottom:1px solid var(--line)}
+
+.mx-hero{padding:90px 0 40px;text-align:center;position:relative}
+.mx-hero .av-lg{width:110px;height:110px;margin:0 auto 22px;border-radius:30px;background:linear-gradient(135deg,var(--primary2),var(--primary));display:grid;place-items:center;font-size:46px;box-shadow:0 0 70px color-mix(in srgb,var(--primary) 55%,transparent);animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px)}}
+.mx-hero h1{font-size:clamp(38px,6vw,68px);line-height:1;letter-spacing:-.02em;margin:0 0 16px}
+.mx-hero h1 span{background:linear-gradient(90deg,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mx-hero p{max-width:560px;margin:0 auto;color:var(--muted);line-height:1.7;font-size:16px}
+.mx-cta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
+.stat{padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center}
+.stat b{font-size:clamp(24px,3vw,34px);color:var(--primary);display:block;font-family:var(--font-mono)}
+.stat span{color:var(--muted);font-size:11.5px;letter-spacing:.05em}
+.stat .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#5be27a;margin-right:5px;animation:db-blink 1.8s infinite}
+
+section.mx-sec{padding:74px 0}
+.mx-head{text-align:center;margin-bottom:34px}
+.mx-head h2{font-size:clamp(28px,4vw,42px);margin:6px 0}
+.mx-head h2 span{color:var(--primary)}
+.mx-head p{color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6}
+
+.cmd-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:26px}
+.cmd-search{flex:1;min-width:220px;max-width:340px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text)}
+.cmd-cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.cmd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cmd{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);transition:.25s}
+.cmd:hover{border-color:var(--primary);transform:translateY(-4px)}
+.cmd code{color:var(--primary);font-family:var(--font-mono);font-size:14px}
+.cmd p{color:var(--muted);font-size:13px;margin:8px 0 0}
+.cmd .cat{display:inline-block;margin-top:10px;font:10px var(--font-mono);color:var(--accent);letter-spacing:.08em}
+.cmd.filtered-out{display:none}
+.no-results{text-align:center;color:var(--muted);padding:30px;display:none}
+.no-results.show{display:block}
+
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);position:relative;overflow:hidden}
+.feat:before{content:"";position:absolute;inset:0;background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--primary) 16%,transparent),transparent 70%);opacity:0;transition:.3s}
+.feat:hover:before{opacity:1}
+.feat h3{margin:0 0 8px;font-size:18px}.feat p{color:var(--muted);font-size:13.5px;margin:0;line-height:1.6}
+.feat .ic{width:40px;height:40px;border-radius:11px;background:color-mix(in srgb,var(--primary) 18%,transparent);display:grid;place-items:center;margin-bottom:14px;font-size:18px}
+
+.invite-box{max-width:560px;margin:0 auto;padding:26px;border-radius:20px;background:var(--card);border:1px solid var(--line);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.invite-box code{flex:1;min-width:200px;font-family:var(--font-mono);color:var(--primary);font-size:13px;word-break:break-all}
+
+@media(max-width:880px){
+  .mx-links{display:none}.mx-burger{display:block}
+  .stat-row{grid-template-columns:1fr 1fr}.cmd-grid,.feat-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){.cmd-grid,.feat-grid,.stat-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="mx-nav">
+  <div class="wrap">
+    <a href="#top" class="mx-logo"><span class="av">◈</span>ModsX</a>
+    <div class="mx-links"><a href="#commands">Commands</a><a href="#features">Features</a><a href="#stats">Stats</a><a href="#support">Support</a></div>
+    <a class="btn btn-primary" href="#invite" style="padding:10px 16px;font-size:13px">Add to Discord</a>
+    <button class="mx-burger" data-nav-toggle="#mx-mobile" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div class="mx-mobile" id="mx-mobile"><a href="#commands">Commands</a><a href="#features">Features</a><a href="#stats">Stats</a><a href="#support">Support</a><a href="#invite">Add to Discord</a></div>
+
+<main class="container" id="top">
+  <section class="mx-hero">
+    <div class="av-lg">◈</div>
+    <div class="mx-eyebrow" style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--muted);text-transform:uppercase">TRUSTED BY 12,000+ SERVERS</div>
+    <h1>Moderation that runs <span>while you sleep.</span></h1>
+    <p>ModsX handles moderation, leveling, music and automation — one lightweight bot, zero config headaches, fully customizable per server.</p>
+    <div class="mx-cta">
+      <a class="btn btn-primary" href="#invite">Add to Discord ↗</a>
+      <a class="btn btn-ghost" href="#commands">Browse Commands</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><b data-count="12480" data-suffix="">0</b><span><i class="live-dot"></i>SERVERS</span></div>
+      <div class="stat"><b data-count="2.1" data-suffix="M">0</b><span>USERS PROTECTED</span></div>
+      <div class="stat"><b data-count="340" data-suffix="+">0</b><span>COMMANDS</span></div>
+      <div class="stat"><b data-count="99.9" data-suffix="%">0</b><span>UPTIME</span></div>
+    </div>
+  </section>
+
+  <section class="mx-sec" id="commands">
+    <div class="mx-head reveal"><div style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--primary)">COMMAND LIBRARY</div><h2>Search <span>340+ commands.</span></h2><p>Type to filter instantly, or browse by category.</p></div>
+    <div class="cmd-controls reveal">
+      <input class="cmd-search" id="cmd-search" placeholder="Search commands e.g. 'ban', 'play'...">
+      <div class="cmd-cats" data-tabs>
+        <button data-tab-btn="all" class="active">All</button>
+        <button data-tab-btn="mod">Moderation</button>
+        <button data-tab-btn="fun">Fun</button>
+        <button data-tab-btn="util">Utility</button>
+        <button data-tab-btn="music">Music</button>
+      </div>
+    </div>
+    <div class="cmd-grid reveal" id="cmd-grid">
+      <div class="cmd" data-cat="mod"><code>/ban @user [reason]</code><p>Bans a member and logs the action to your mod-log channel.</p><span class="cat">MODERATION</span></div>
+      <div class="cmd" data-cat="mod"><code>/warn @user [reason]</code><p>Issues a tracked warning; auto-escalates after 3 strikes.</p><span class="cat">MODERATION</span></div>
+      <div class="cmd" data-cat="mod"><code>/slowmode [seconds]</code><p>Applies channel slowmode instantly during raids or spam.</p><span class="cat">MODERATION</span></div>
+      <div class="cmd" data-cat="util"><code>/serverinfo</code><p>Displays member count, boosts, roles and creation date.</p><span class="cat">UTILITY</span></div>
+      <div class="cmd" data-cat="util"><code>/remind [time] [note]</code><p>Sets a personal or channel reminder with flexible time parsing.</p><span class="cat">UTILITY</span></div>
+      <div class="cmd" data-cat="util"><code>/poll [question]</code><p>Creates a reaction-based poll with live vote counts.</p><span class="cat">UTILITY</span></div>
+      <div class="cmd" data-cat="fun"><code>/rank</code><p>Shows your XP level card with a custom progress bar.</p><span class="cat">FUN</span></div>
+      <div class="cmd" data-cat="fun"><code>/8ball [question]</code><p>Classic magic 8-ball, reskinned with ModsX flavor text.</p><span class="cat">FUN</span></div>
+      <div class="cmd" data-cat="fun"><code>/meme</code><p>Fetches a fresh meme from a curated rotating pool.</p><span class="cat">FUN</span></div>
+      <div class="cmd" data-cat="music"><code>/play [song]</code><p>Streams audio into your voice channel with a queue system.</p><span class="cat">MUSIC</span></div>
+      <div class="cmd" data-cat="music"><code>/queue</code><p>Lists everything queued up, with skip/remove buttons.</p><span class="cat">MUSIC</span></div>
+      <div class="cmd" data-cat="music"><code>/247</code><p>Keeps ModsX in voice 24/7 for always-on radio channels.</p><span class="cat">MUSIC</span></div>
+    </div>
+    <div class="no-results" id="cmd-empty">No commands match your search — try a different keyword.</div>
+  </section>
+
+  <section class="mx-sec" id="features">
+    <div class="mx-head reveal"><div style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--primary)">FEATURES</div><h2>One bot, <span>every essential.</span></h2></div>
+    <div class="feat-grid stagger">
+      <div class="feat tilt reveal"><div class="ic">🛡️</div><h3>Auto-Moderation</h3><p>Spam, link and raid protection that reacts in milliseconds.</p></div>
+      <div class="feat tilt reveal"><div class="ic">📈</div><h3>Leveling System</h3><p>Custom XP curves, role rewards and leaderboard commands.</p></div>
+      <div class="feat tilt reveal"><div class="ic">🎵</div><h3>Music Engine</h3><p>High-quality streaming with queueing, loop and filters.</p></div>
+      <div class="feat tilt reveal"><div class="ic">🔧</div><h3>Custom Commands</h3><p>Build your own commands with a no-code response builder.</p></div>
+      <div class="feat tilt reveal"><div class="ic">📊</div><h3>Analytics Dashboard</h3><p>Web dashboard for logs, growth charts and member activity.</p></div>
+      <div class="feat tilt reveal"><div class="ic">🔔</div><h3>Smart Alerts</h3><p>Welcome messages, boost alerts and scheduled announcements.</p></div>
+    </div>
+  </section>
+
+  <section class="mx-sec" id="stats">
+    <div class="mx-head reveal"><div style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--primary)">LIVE STATUS</div><h2>Ticking in <span>real time.</span></h2><p>Numbers below update automatically to simulate a live bot dashboard feed.</p></div>
+    <div class="stat-row" style="margin-top:0">
+      <div class="stat"><b id="live-servers" class="mono">12,480</b><span><i class="live-dot"></i>SERVERS ONLINE</span></div>
+      <div class="stat"><b id="live-commands" class="mono">3,204,118</b><span>COMMANDS RUN TODAY</span></div>
+      <div class="stat"><b id="live-voice" class="mono">1,942</b><span>ACTIVE VOICE SESSIONS</span></div>
+      <div class="stat"><b id="live-ping" class="mono">38ms</b><span>API LATENCY</span></div>
+    </div>
+  </section>
+
+  <section class="mx-sec" id="invite">
+    <div class="mx-head reveal"><div style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--primary)">GET STARTED</div><h2>Add ModsX to <span>your server.</span></h2></div>
+    <div class="invite-box reveal">
+      <code id="invite-link">https://discord.com/oauth2/authorize?client_id=modsx-demo&scope=bot</code>
+      <button class="btn btn-primary" id="copy-invite">Copy Link</button>
+    </div>
+  </section>
+
+  <section class="mx-sec" id="support">
+    <div class="mx-head reveal"><div style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--primary)">FAQ</div><h2>Common <span>questions.</span></h2></div>
+    <div style="max-width:700px;margin:0 auto" data-accordion-single>
+      <div class="accordion-item"><div class="accordion-head">Is ModsX free to use? <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">Yes — the core moderation, leveling and utility commands are free forever. A Pro tier unlocks advanced automation and priority support.</div></div></div>
+      <div class="accordion-item"><div class="accordion-head">Can I customize commands? <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">Yes, the dashboard includes a no-code builder for custom slash commands, auto-responses and embeds.</div></div></div>
+      <div class="accordion-item"><div class="accordion-head">Does it support multiple languages? <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">ModsX supports 14 languages out of the box, auto-detected per server or set manually by admins.</div></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="demo-footer"><span>© 2026 MODSX — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL BOT</span></footer>
+
+<script src="assets/demo.js"></script>
+<script>
+// command search + category filter combined
+(function(){
+  const cards=DL.$$('.cmd');
+  const search=DL.$('#cmd-search');
+  const empty=DL.$('#cmd-empty');
+  let activeCat='all';
+  function apply(){
+    const q=search.value.trim().toLowerCase();
+    let visible=0;
+    cards.forEach(c=>{
+      const matchesCat=activeCat==='all'||c.dataset.cat===activeCat;
+      const matchesQ=!q||c.textContent.toLowerCase().includes(q);
+      const show=matchesCat&&matchesQ;
+      c.classList.toggle('filtered-out',!show);
+      if(show)visible++;
+    });
+    empty.classList.toggle('show',visible===0);
+  }
+  search.addEventListener('input',apply);
+  DL.$$('[data-tab-btn]').forEach(b=>b.addEventListener('click',()=>{activeCat=b.dataset.tabBtn;apply()}));
+})();
+// copy invite link
+(function(){
+  const btn=DL.$('#copy-invite'), link=DL.$('#invite-link');
+  btn.addEventListener('click',()=>{
+    const text=link.textContent;
+    if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>DL.toast('Invite link copied to clipboard.'))}
+    else DL.toast('Invite link: '+text);
+  });
+})();
+// fake live ticking stats
+(function(){
+  const servers=DL.$('#live-servers'), commands=DL.$('#live-commands'), voice=DL.$('#live-voice'), ping=DL.$('#live-ping');
+  let s=12480,c=3204118,v=1942;
+  setInterval(()=>{
+    s+=Math.floor(Math.random()*3); c+=Math.floor(Math.random()*40+5); v+=Math.floor(Math.random()*7-3);
+    v=Math.max(1200,v);
+    servers.textContent=s.toLocaleString();
+    commands.textContent=c.toLocaleString();
+    voice.textContent=v.toLocaleString();
+    ping.textContent=(30+Math.floor(Math.random()*20))+'ms';
+  },2200);
+})();
+</script>
+</body>
+</html>

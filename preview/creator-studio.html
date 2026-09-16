@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Creator Studio — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#0d0710;--bg2:#160d1c;--card:rgba(30,17,38,.55);--text:#fdf3ff;--muted:#c2a8cf;
+  --line:rgba(255,255,255,.13);--primary:#ff7ad9;--primary2:#8a5cff;--accent:#7ae0ff;
+  --radius:24px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#fbf5fb;--bg2:#f4e8f5;--card:rgba(255,255,255,.62);--text:#1e1123;--muted:#7a6584;--line:rgba(30,17,35,.12)}
+body{cursor:default}
+.blob{position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--primary2) 40%,transparent),transparent 70%);pointer-events:none;z-index:1;filter:blur(10px);transition:transform .15s linear;transform:translate(-50%,-50%)}
+
+.cs-nav{position:sticky;top:52px;z-index:90;padding:15px 0;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.cs-nav .wrap{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px;position:relative;z-index:2}
+.cs-logo{font-family:'Instrument Serif',serif;font-style:italic;font-size:22px}
+.cs-links{display:flex;gap:4px;margin:auto}
+.cs-links a{padding:9px 13px;border-radius:20px;color:var(--muted);font-size:13.5px}
+.cs-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.cs-burger{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);font-size:18px}
+.cs-mobile{position:fixed;top:0;right:-100%;height:100%;width:min(300px,84vw);z-index:250;background:var(--bg2);border-left:1px solid var(--line);padding:80px 22px 22px;transition:right .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:6px}
+.cs-mobile.open{right:0}
+.cs-mobile a{padding:14px;border-radius:12px;color:var(--text);border-bottom:1px solid var(--line)}
+
+.cs-hero{position:relative;z-index:2;padding:100px 0 60px;text-align:center}
+.cs-hero .eyebrow{font:11px var(--font-mono);letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.cs-hero h1{font-size:clamp(42px,7vw,86px);line-height:.95;margin:18px 0;letter-spacing:-.02em}
+.cs-hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--primary)}
+#typewriter{font-family:var(--font-mono);color:var(--accent);font-size:16px;display:inline-block;min-height:1.4em}
+#typewriter:after{content:"▌";animation:blink 1s step-end infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+.cs-hero p{max-width:560px;margin:16px auto 0;color:var(--muted);line-height:1.7}
+.cs-cta{margin-top:26px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+section.cs-sec{padding:70px 0;position:relative;z-index:2}
+.cs-head{text-align:center;margin-bottom:32px}
+.cs-head h2{font-size:clamp(28px,4vw,44px);margin:6px 0}
+.cs-head h2 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--primary)}
+.cs-head p{color:var(--muted);max-width:480px;margin:0 auto}
+
+.filter-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.proj{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(14px);cursor:pointer;transition:.3s;display:none}
+.proj.show{display:block}
+.proj:hover{transform:translateY(-6px);border-color:var(--primary)}
+.proj .thumb{height:150px;background:linear-gradient(135deg,var(--primary2),var(--primary));position:relative;overflow:hidden}
+.proj .thumb:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent,transparent 18px,rgba(255,255,255,.08) 18px,rgba(255,255,255,.08) 20px)}
+.proj-body{padding:18px}
+.proj-body span{font:10px var(--font-mono);color:var(--accent)}
+.proj-body h3{margin:8px 0 6px;font-size:18px}
+.proj-body p{color:var(--muted);font-size:13px;margin:0}
+
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:14px 34px;max-width:760px;margin:0 auto}
+.skill .label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:var(--muted)}
+.skill-track{height:8px;border-radius:20px;background:rgba(255,255,255,.08);overflow:hidden}
+.skill-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--primary2),var(--primary));transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.skill.in .skill-fill{width:var(--pct)}
+
+.testi{max-width:680px;margin:0 auto;text-align:center;min-height:150px}
+.testi-slide{display:none;animation:cs-fade .5s ease}
+.testi-slide.active{display:block}
+@keyframes cs-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.testi-slide p{font-size:19px;line-height:1.6;font-family:'Instrument Serif',serif;font-style:italic}
+.testi-slide b{color:var(--primary);font-family:var(--font-body);font-style:normal}
+.testi-dots{display:flex;justify-content:center;gap:7px;margin-top:18px}
+.testi-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.testi-dots i.active{background:var(--primary);width:20px;border-radius:8px}
+
+.form-card{max-width:600px;margin:0 auto;padding:28px;border-radius:24px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(14px)}
+.field{margin-bottom:15px}.field label{font:10px var(--font-mono);letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:6px}
+.field input,.field textarea{width:100%;padding:13px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.05);outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--primary)}
+.field textarea{min-height:100px;resize:vertical}
+
+.dl-modal-box .m-thumb{height:130px;border-radius:14px;background:linear-gradient(135deg,var(--primary2),var(--primary));margin-bottom:16px}
+
+@media(max-width:880px){.cs-links{display:none}.cs-burger{display:block}.proj-grid{grid-template-columns:1fr 1fr}.skills{grid-template-columns:1fr}.blob{display:none}}
+@media(max-width:560px){.proj-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="blob" id="blob"></div>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="cs-nav">
+  <div class="wrap">
+    <a href="#top" class="cs-logo">Aiko.</a>
+    <div class="cs-links"><a href="#work">Work</a><a href="#skills">Skills</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a></div>
+    <a class="btn btn-primary" href="#contact" style="padding:10px 16px;font-size:13px">Hire Me</a>
+    <button class="cs-burger" data-nav-toggle="#cs-mobile" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div class="cs-mobile" id="cs-mobile"><a href="#work">Work</a><a href="#skills">Skills</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a></div>
+
+<main class="container" id="top">
+  <section class="cs-hero">
+    <div class="eyebrow">Product Designer &amp; Creative Developer</div>
+    <h1>I build <em>digital worlds</em><br>people enjoy.</h1>
+    <div id="typewriter"></div>
+    <p>Freelance designer and front-end developer crafting brand sites, interactive portfolios and playful product interfaces.</p>
+    <div class="cs-cta"><a class="btn btn-primary" href="#work">View Work ↗</a><a class="btn btn-ghost" href="#contact">Start a Project</a></div>
+  </section>
+
+  <section class="cs-sec" id="work">
+    <div class="cs-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--accent)">SELECTED WORK</div><h2>Projects across <em>every medium.</em></h2></div>
+    <div class="filter-row reveal" data-tabs>
+      <button data-tab-btn="all" class="active">All</button>
+      <button data-tab-btn="web">Web</button>
+      <button data-tab-btn="brand">Branding</button>
+      <button data-tab-btn="motion">Motion</button>
+    </div>
+    <div class="proj-grid reveal" id="proj-grid">
+      <article class="proj show" data-cat="web" data-title="Solstice Market" data-desc="A headless e-commerce storefront with a custom checkout flow and 40% faster load times."><div class="thumb"></div><div class="proj-body"><span>WEB · 2025</span><h3>Solstice Market</h3><p>Headless storefront redesign</p></div></article>
+      <article class="proj show" data-cat="brand" data-title="Fernweh Coffee" data-desc="Full brand identity — logotype, packaging system and a warm, editorial visual language."><div class="thumb"></div><div class="proj-body"><span>BRANDING · 2025</span><h3>Fernweh Coffee</h3><p>Identity &amp; packaging system</p></div></article>
+      <article class="proj show" data-cat="motion" data-title="Kinetic Reel" data-desc="A 45-second motion reel exploring kinetic typography for a music label launch."><div class="thumb"></div><div class="proj-body"><span>MOTION · 2024</span><h3>Kinetic Reel</h3><p>Kinetic typography showcase</p></div></article>
+      <article class="proj show" data-cat="web" data-title="Loop Analytics" data-desc="A real-time analytics dashboard UI with custom charting components and dark mode."><div class="thumb"></div><div class="proj-body"><span>WEB · 2024</span><h3>Loop Analytics</h3><p>SaaS dashboard interface</p></div></article>
+      <article class="proj show" data-cat="brand" data-title="Nightshade Records" data-desc="Bold, high-contrast identity system for an independent electronic music label."><div class="thumb"></div><div class="proj-body"><span>BRANDING · 2024</span><h3>Nightshade Records</h3><p>Label identity &amp; merch</p></div></article>
+      <article class="proj show" data-cat="motion" data-title="Orbit Onboarding" data-desc="Animated onboarding sequence for a fitness app, built with layered SVG motion."><div class="thumb"></div><div class="proj-body"><span>MOTION · 2023</span><h3>Orbit Onboarding</h3><p>App onboarding animation</p></div></article>
+    </div>
+  </section>
+
+  <section class="cs-sec" id="skills">
+    <div class="cs-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--accent)">TOOLKIT</div><h2>Design meets <em>engineering.</em></h2></div>
+    <div class="skills stagger">
+      <div class="skill reveal" style="--pct:95%"><div class="label"><span>UI / Product Design</span><span>95%</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+      <div class="skill reveal" style="--pct:88%"><div class="label"><span>Front-end Development</span><span>88%</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+      <div class="skill reveal" style="--pct:80%"><div class="label"><span>Motion &amp; Animation</span><span>80%</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+      <div class="skill reveal" style="--pct:90%"><div class="label"><span>Brand Identity</span><span>90%</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+    </div>
+  </section>
+
+  <section class="cs-sec" id="reviews">
+    <div class="cs-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--accent)">TESTIMONIALS</div><h2>Clients say <em>it's different.</em></h2></div>
+    <div class="testi reveal">
+      <div class="testi-slide active"><p>"Aiko turned a vague idea into a brand system we still use two years later. Genuinely rare talent."</p><b>— Lena Ford, Fernweh Coffee</b></div>
+      <div class="testi-slide"><p>"The motion work elevated our launch completely. Every frame felt intentional."</p><b>— Marco Bellini, Nightshade Records</b></div>
+      <div class="testi-slide"><p>"Fast, collaborative, and the code quality matched the design quality. Would hire again instantly."</p><b>— Priti Shah, Loop Analytics</b></div>
+      <div class="testi-dots" id="testi-dots"></div>
+    </div>
+  </section>
+
+  <section class="cs-sec" id="contact">
+    <div class="cs-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);letter-spacing:.2em;color:var(--accent)">CONTACT</div><h2>Got a project <em>in mind?</em></h2></div>
+    <form class="form-card reveal" id="cs-form">
+      <div class="field"><label>NAME</label><input type="text" id="cs-name" required></div>
+      <div class="field"><label>EMAIL</label><input type="email" id="cs-email" required></div>
+      <div class="field"><label>MESSAGE</label><textarea id="cs-msg" required></textarea></div>
+      <button class="btn btn-primary" type="submit" style="width:100%">Send Message ↗</button>
+    </form>
+  </section>
+</main>
+
+<footer class="demo-footer"><span>© 2026 AIKO CREATOR STUDIO — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL PERSON</span></footer>
+
+<div class="dl-modal" id="proj-modal">
+  <div class="dl-modal-box">
+    <button class="dl-modal-close" data-modal-close>×</button>
+    <div class="m-thumb"></div>
+    <span style="font:10px var(--font-mono);color:var(--accent)" id="m-cat"></span>
+    <h3 id="m-title" style="margin:8px 0"></h3>
+    <p id="m-desc" style="color:var(--muted);line-height:1.6"></p>
+    <a class="btn btn-primary" href="#contact" data-modal-close style="margin-top:10px">Discuss a similar project ↗</a>
+  </div>
+</div>
+
+<script src="assets/demo.js"></script>
+<script>
+// cursor-follow blob (desktop only)
+(function(){
+  const blob=DL.$('#blob');
+  if(matchMedia('(pointer:coarse)').matches)return;
+  let tx=innerWidth/2,ty=innerHeight/2,x=tx,y=ty;
+  addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+  (function loop(){x+=(tx-x)*.08;y+=(ty-y)*.08;blob.style.left=x+'px';blob.style.top=y+'px';requestAnimationFrame(loop)})();
+})();
+// typewriter effect
+(function(){
+  const el=DL.$('#typewriter');
+  const phrases=['Interfaces that feel alive.','Brands people remember.','Motion with purpose.'];
+  let p=0,c=0,deleting=false;
+  function tick(){
+    const word=phrases[p];
+    el.textContent=deleting?word.slice(0,c--):word.slice(0,c++);
+    let delay=deleting?35:65;
+    if(!deleting&&c===word.length+1){deleting=true;delay=1400}
+    else if(deleting&&c<0){deleting=false;p=(p+1)%phrases.length;c=0;delay=400}
+    setTimeout(tick,delay);
+  }
+  tick();
+})();
+// project filter + modal
+(function(){
+  const cards=DL.$$('.proj');
+  DL.$$('[data-tab-btn]').forEach(b=>b.addEventListener('click',()=>{
+    const cat=b.dataset.tabBtn;
+    cards.forEach(c=>c.classList.toggle('show',cat==='all'||c.dataset.cat===cat));
+  }));
+  const modal=DL.$('#proj-modal');
+  cards.forEach(c=>c.addEventListener('click',()=>{
+    DL.$('#m-title').textContent=c.dataset.title;
+    DL.$('#m-desc').textContent=c.dataset.desc;
+    DL.$('#m-cat').textContent=c.querySelector('span').textContent;
+    modal.classList.add('open');
+  }));
+})();
+// testimonial dots autoplay
+(function(){
+  const slides=DL.$$('.testi-slide'), dots=DL.$('#testi-dots');
+  let i=0;
+  slides.forEach((_,idx)=>{const d=document.createElement('i');if(idx===0)d.classList.add('active');dots.appendChild(d)});
+  setInterval(()=>{slides[i].classList.remove('active');dots.children[i].classList.remove('active');i=(i+1)%slides.length;slides[i].classList.add('active');dots.children[i].classList.add('active')},5000);
+})();
+// contact form
+DL.$('#cs-form').addEventListener('submit',e=>{e.preventDefault();DL.toast('Message sent — this is a demo, no data leaves your browser.');e.target.reset()});
+</script>
+</body>
+</html>

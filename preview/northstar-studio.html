@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Northstar Studio — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#f7f6f2;--bg2:#eeece5;--card:rgba(255,255,255,.7);--text:#111111;--muted:#5c5a54;
+  --line:rgba(17,17,17,.13);--primary:#111111;--primary2:#111111;--accent:#c65a2e;
+  --radius:0px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#f7f6f2;--bg2:#eeece5;--card:rgba(255,255,255,.7);--text:#111111;--muted:#5c5a54;--line:rgba(17,17,17,.13)}
+[data-theme="dark"]{--bg:#111111;--bg2:#181818;--card:rgba(255,255,255,.05);--text:#f4f2ec;--muted:#a5a29a;--line:rgba(255,255,255,.14);--accent:#ff8a54}
+body{letter-spacing:-.01em}
+.btn-primary{background:var(--text);color:var(--bg);box-shadow:none}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 0 0 var(--accent)}
+.btn-ghost{border-color:var(--text)}
+
+.ns-nav{position:sticky;top:52px;z-index:90;padding:20px 0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.ns-nav .wrap{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px}
+.ns-logo{font-weight:800;font-size:19px;text-transform:uppercase;letter-spacing:.02em}
+.ns-links{display:flex;gap:6px;margin:auto}
+.ns-links a{padding:9px 13px;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.ns-links a:hover{color:var(--text)}
+.ns-burger{display:none;width:40px;height:40px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:18px}
+.ns-mobile{position:fixed;top:0;right:-100%;height:100%;width:min(300px,84vw);z-index:250;background:var(--bg2);border-left:1px solid var(--line);padding:80px 22px 22px;transition:right .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:6px}
+.ns-mobile.open{right:0}
+.ns-mobile a{padding:14px;color:var(--text);border-bottom:1px solid var(--line);text-transform:uppercase;font-size:13px}
+
+.ns-hero{padding:100px 0 60px}
+.ns-hero .eyebrow{font:11px var(--font-mono);letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
+.split-line{overflow:hidden}
+.split-line span{display:inline-block;transform:translateY(110%);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.split-line.in span{transform:none}
+.ns-hero h1{font-size:clamp(46px,8vw,120px);line-height:.92;letter-spacing:-.04em;margin:18px 0 26px;text-transform:uppercase;font-weight:800}
+.ns-hero p{max-width:520px;color:var(--muted);line-height:1.7;font-size:17px}
+.ns-cta{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap}
+.magnetic{position:relative;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+
+section.ns-sec{padding:80px 0}
+.ns-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:36px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:24px}
+.ns-head h2{font-size:clamp(30px,4vw,48px);margin:6px 0;text-transform:uppercase;font-weight:800;letter-spacing:-.02em}
+.ns-head p{color:var(--muted);max-width:420px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap}
+.filter-row button{border:1px solid var(--line);background:transparent;color:var(--muted);padding:9px 15px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.filter-row button.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+.case-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.case{background:var(--bg);padding:34px;display:none;transition:.3s}
+.case.show{display:block}
+.case:hover{background:var(--card)}
+.case span{font:11px var(--font-mono);color:var(--accent);letter-spacing:.08em}
+.case h3{font-size:28px;margin:12px 0 10px;text-transform:uppercase;font-weight:800}
+.case p{color:var(--muted);line-height:1.6;font-size:14px;margin:0}
+
+.marquee-track span{font-size:40px;font-weight:800;text-transform:uppercase;color:var(--muted);letter-spacing:-.01em}
+
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.p-step{background:var(--bg);padding:26px}
+.p-step b{font:26px var(--font-mono);color:var(--accent);display:block;margin-bottom:12px}
+.p-step h4{margin:0 0 8px;text-transform:uppercase;font-size:15px;letter-spacing:.02em}
+.p-step p{color:var(--muted);font-size:13px;line-height:1.5;margin:0}
+
+.form-card{max-width:640px;padding:0}
+.field{margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.field label{font:10px var(--font-mono);color:var(--muted);letter-spacing:.1em;display:block;margin-bottom:8px;text-transform:uppercase}
+.field input,.field textarea{width:100%;border:0;background:transparent;color:var(--text);outline:none;font-size:16px;padding:6px 0}
+.field textarea{min-height:80px;resize:vertical}
+
+@media(max-width:880px){.ns-links{display:none}.ns-burger{display:block}.case-grid,.process{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="ns-nav">
+  <div class="wrap">
+    <a href="#top" class="ns-logo">Northstar</a>
+    <div class="ns-links"><a href="#work">Work</a><a href="#process">Process</a><a href="#studio">Studio</a><a href="#contact">Contact</a></div>
+    <a class="btn btn-primary" href="#contact" style="padding:10px 16px;font-size:13px;border-radius:0">Start a Project</a>
+    <button class="ns-burger" data-nav-toggle="#ns-mobile" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div class="ns-mobile" id="ns-mobile"><a href="#work">Work</a><a href="#process">Process</a><a href="#studio">Studio</a><a href="#contact">Contact</a></div>
+
+<main class="container" id="top">
+  <section class="ns-hero">
+    <div class="eyebrow">Independent Creative Agency</div>
+    <h1>
+      <div class="split-line" data-split><span>We build brands</span></div>
+      <div class="split-line" data-split><span>that hold attention.</span></div>
+    </h1>
+    <p>Northstar is a small studio for bold work — brand identity, web design and campaigns for founders who refuse to look ordinary.</p>
+    <div class="ns-cta">
+      <a class="btn btn-primary magnetic" href="#contact" style="border-radius:0">Start a Project ↗</a>
+      <a class="btn btn-ghost magnetic" href="#work" style="border-radius:0">See Our Work</a>
+    </div>
+  </section>
+
+  <section class="ns-sec" id="work">
+    <div class="ns-head reveal">
+      <div><div class="eyebrow">Selected Case Studies</div><h2>Recent Work</h2></div>
+      <div class="filter-row" data-tabs>
+        <button data-tab-btn="all" class="active">All</button>
+        <button data-tab-btn="brand">Branding</button>
+        <button data-tab-btn="web">Web</button>
+        <button data-tab-btn="campaign">Campaign</button>
+      </div>
+    </div>
+    <div class="case-grid reveal" id="case-grid">
+      <article class="case show" data-cat="brand"><span>BRANDING · 2025</span><h3>Ferro &amp; Co.</h3><p>Full identity overhaul for a furniture maker moving upmarket — new mark, type system and packaging.</p></article>
+      <article class="case show" data-cat="web"><span>WEB DESIGN · 2025</span><h3>Halcyon Health</h3><p>A calmer, editorial redesign of a telehealth platform focused on trust and clarity.</p></article>
+      <article class="case show" data-cat="campaign"><span>CAMPAIGN · 2024</span><h3>Meridian Running</h3><p>Launch campaign across print, out-of-home and social for a new performance shoe line.</p></article>
+      <article class="case show" data-cat="brand"><span>BRANDING · 2024</span><h3>Salt & Cedar</h3><p>Warm, tactile identity for a boutique hospitality group opening three new properties.</p></article>
+      <article class="case show" data-cat="web"><span>WEB DESIGN · 2024</span><h3>Ledger Finance</h3><p>A confident, data-forward site for a fintech startup raising its Series B.</p></article>
+      <article class="case show" data-cat="campaign"><span>CAMPAIGN · 2023</span><h3>Northline Records</h3><p>Album rollout campaign spanning motion, print and a pop-up listening room.</p></article>
+    </div>
+  </section>
+
+  <section class="ns-sec">
+    <div class="marquee reveal"><div class="marquee-track" id="logo-track"></div></div>
+  </section>
+
+  <section class="ns-sec" id="process">
+    <div class="ns-head reveal"><div><div class="eyebrow">How We Work</div><h2>Our Process</h2></div></div>
+    <div class="process stagger">
+      <div class="p-step reveal"><b>01</b><h4>Discover</h4><p>Workshops and research to understand your market and audience.</p></div>
+      <div class="p-step reveal"><b>02</b><h4>Define</h4><p>Strategy and positioning that gives the creative work direction.</p></div>
+      <div class="p-step reveal"><b>03</b><h4>Design</h4><p>Iterative concepts reviewed together until it feels unmistakably yours.</p></div>
+      <div class="p-step reveal"><b>04</b><h4>Deliver</h4><p>Launch-ready assets, guidelines and hand-off, built to last.</p></div>
+    </div>
+  </section>
+
+  <section class="ns-sec" id="studio">
+    <div class="ns-head reveal"><div><div class="eyebrow">About</div><h2>The Studio</h2></div></div>
+    <p class="reveal" style="max-width:640px;color:var(--muted);line-height:1.8;font-size:16px">Northstar is a nine-person studio working with founders and marketing teams who want work that doesn't blend in. We keep client rosters small on purpose — every project gets senior attention from strategy through delivery.</p>
+  </section>
+
+  <section class="ns-sec" id="contact">
+    <div class="ns-head reveal"><div><div class="eyebrow">Get In Touch</div><h2>Start a Project</h2></div></div>
+    <form class="form-card reveal" id="ns-form">
+      <div class="field"><label>Name</label><input type="text" required></div>
+      <div class="field"><label>Email</label><input type="email" required></div>
+      <div class="field"><label>Tell us about the project</label><textarea required></textarea></div>
+      <button class="btn btn-primary magnetic" type="submit" style="border-radius:0;margin-top:10px">Send Inquiry ↗</button>
+    </form>
+  </section>
+</main>
+
+<footer class="demo-footer"><span>© 2026 NORTHSTAR STUDIO — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL AGENCY</span></footer>
+
+<script src="assets/demo.js"></script>
+<script>
+// split-text line reveal
+(function(){
+  const lines=DL.$$('[data-split]');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.3});
+  lines.forEach(l=>io.observe(l));
+})();
+// magnetic buttons
+(function(){
+  if(matchMedia('(pointer:coarse)').matches)return;
+  DL.$$('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const x=(e.clientX-r.left-r.width/2)*.3, y=(e.clientY-r.top-r.height/2)*.4;
+      btn.style.transform=`translate(${x}px,${y}px)`;
+    });
+    btn.addEventListener('mouseleave',()=>btn.style.transform='');
+  });
+})();
+// case study filter
+(function(){
+  DL.$$('[data-tab-btn]').forEach(b=>b.addEventListener('click',()=>{
+    const cat=b.dataset.tabBtn;
+    DL.$$('.case').forEach(c=>c.classList.toggle('show',cat==='all'||c.dataset.cat===cat));
+  }));
+})();
+// client wordmark marquee
+(function(){
+  const names=['Ferro & Co','Halcyon','Meridian','Salt & Cedar','Ledger','Northline'];
+  const track=DL.$('#logo-track');
+  [...names,...names].forEach(n=>{const s=document.createElement('span');s.textContent=n;track.appendChild(s)});
+})();
+DL.$('#ns-form').addEventListener('submit',e=>{e.preventDefault();DL.toast('Inquiry sent — this is a demo, no data leaves your browser.');e.target.reset()});
+</script>
+</body>
+</html>

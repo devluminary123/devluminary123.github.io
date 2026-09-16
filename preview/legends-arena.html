@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legends Arena — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#050810;--bg2:#0a0e1a;--card:rgba(12,18,32,.78);--text:#e6faff;--muted:#7f93b3;
+  --line:rgba(0,240,255,.15);--primary:#00e5ff;--primary2:#ff2ee0;--accent:#c8ff4d;
+  --radius:14px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#f2f7fb;--bg2:#e6f1f8;--card:rgba(255,255,255,.86);--text:#071522;--muted:#48607a;--line:rgba(7,21,34,.12)}
+#bg-canvas{position:fixed;inset:0;z-index:0;opacity:.55}
+.la-nav{position:sticky;top:52px;z-index:90;padding:15px 0;background:color-mix(in srgb,var(--bg) 75%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.la-nav .wrap{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px;position:relative;z-index:2}
+.la-logo{font-weight:800;letter-spacing:.03em;display:flex;align-items:center;gap:8px;text-transform:uppercase;font-size:15px}
+.la-logo i{width:20px;height:20px;background:linear-gradient(135deg,var(--primary),var(--primary2));clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.la-links{display:flex;gap:4px;margin:auto}
+.la-links a{padding:9px 13px;border-radius:8px;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.03em}
+.la-links a:hover{color:var(--text);background:rgba(0,229,255,.08)}
+.la-burger{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);font-size:18px}
+.la-mobile{position:fixed;top:0;right:-100%;height:100%;width:min(300px,84vw);z-index:250;background:var(--bg2);border-left:1px solid var(--line);padding:80px 22px 22px;transition:right .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:6px}
+.la-mobile.open{right:0}
+.la-mobile a{padding:14px;border-radius:12px;color:var(--text);border-bottom:1px solid var(--line);text-transform:uppercase;font-size:13px}
+
+.la-hero{position:relative;z-index:2;padding:90px 0 20px;text-align:center}
+.la-hero .eyebrow{font:11px var(--font-mono);letter-spacing:.24em;color:var(--primary2);text-transform:uppercase}
+.la-hero h1{font-size:clamp(38px,7vw,84px);line-height:.95;letter-spacing:-.02em;margin:16px 0;text-transform:uppercase}
+.la-hero h1 span{color:var(--primary);text-shadow:0 0 30px color-mix(in srgb,var(--primary) 60%,transparent)}
+.la-hero p{max-width:560px;margin:0 auto;color:var(--muted);line-height:1.7}
+.la-cta{margin-top:26px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+.countdown{display:flex;gap:14px;justify-content:center;margin:40px 0 10px}
+.cd-box{width:80px;padding:14px 0;border:1px solid var(--line);border-radius:12px;background:var(--card);text-align:center}
+.cd-box b{font-size:28px;font-family:var(--font-mono);color:var(--primary);display:block}
+.cd-box span{font-size:10px;color:var(--muted);letter-spacing:.1em}
+
+section.la-sec{padding:70px 0;position:relative;z-index:2}
+.la-head{text-align:center;margin-bottom:32px}
+.la-head h2{font-size:clamp(28px,4vw,44px);margin:6px 0;text-transform:uppercase}
+.la-head h2 span{color:var(--primary)}
+.la-head p{color:var(--muted);max-width:520px;margin:0 auto}
+
+.event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.event{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);transition:.3s}
+.event:hover{border-color:var(--primary);transform:translateY(-5px)}
+.event .tag{font:10px var(--font-mono);color:var(--primary2);letter-spacing:.08em}
+.event h3{margin:10px 0 6px}
+.event p{color:var(--muted);font-size:13.5px;margin:0}
+
+table.board{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+table.board th{text-align:left;padding:14px 16px;background:rgba(255,255,255,.03);font:11px var(--font-mono);color:var(--muted);letter-spacing:.08em;cursor:pointer;user-select:none}
+table.board th:hover{color:var(--primary)}
+table.board th .arrow{opacity:0;margin-left:5px}
+table.board th.sorted .arrow{opacity:1}
+table.board td{padding:13px 16px;border-top:1px solid var(--line);font-size:14px}
+table.board tr td:first-child{font-family:var(--font-mono);color:var(--primary)}
+table.board tbody tr:hover{background:rgba(0,229,255,.04)}
+.rank-1{color:var(--accent)!important;font-weight:700}
+
+.rules{max-width:720px;margin:0 auto}
+
+@media(max-width:880px){.la-links{display:none}.la-burger{display:block}.event-grid{grid-template-columns:1fr 1fr}table.board{font-size:12px}}
+@media(max-width:560px){.event-grid{grid-template-columns:1fr}.countdown{flex-wrap:wrap}.cd-box{width:70px}table.board th:nth-child(4),table.board td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="la-nav">
+  <div class="wrap">
+    <a href="#top" class="la-logo"><i></i>Legends Arena</a>
+    <div class="la-links"><a href="#events">Events</a><a href="#leaderboard">Leaderboard</a><a href="#rules">Rules</a></div>
+    <a class="btn btn-primary" href="#events" style="padding:10px 16px;font-size:13px">Join Discord</a>
+    <button class="la-burger" data-nav-toggle="#la-mobile" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div class="la-mobile" id="la-mobile"><a href="#events">Events</a><a href="#leaderboard">Leaderboard</a><a href="#rules">Rules</a></div>
+
+<main class="container" id="top">
+  <section class="la-hero">
+    <div class="eyebrow">Season 7 · Ranked Ladder Open</div>
+    <h1>Enter the <span>Arena.</span></h1>
+    <p>Legends Arena is a competitive gaming community with weekly tournaments, ranked ladders and a leaderboard that never sleeps.</p>
+    <div class="la-cta"><a class="btn btn-primary" href="#events">Join Discord ↗</a><a class="btn btn-ghost" href="#leaderboard">View Leaderboard</a></div>
+    <div class="countdown" id="countdown">
+      <div class="cd-box"><b id="cd-d">00</b><span>DAYS</span></div>
+      <div class="cd-box"><b id="cd-h">00</b><span>HOURS</span></div>
+      <div class="cd-box"><b id="cd-m">00</b><span>MINUTES</span></div>
+      <div class="cd-box"><b id="cd-s">00</b><span>SECONDS</span></div>
+    </div>
+    <p style="color:var(--muted);font-size:12px">until the Season 7 Finals kick off</p>
+  </section>
+
+  <section class="la-sec" id="events">
+    <div class="la-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);color:var(--primary2)">UPCOMING</div><h2>Tournaments &amp; <span>events.</span></h2></div>
+    <div class="event-grid stagger">
+      <div class="event reveal"><span class="tag">RANKED · 5v5</span><h3>Weekend Clash</h3><p>Open bracket, top 8 teams advance to the Sunday finals stream.</p></div>
+      <div class="event reveal"><span class="tag">SOLO QUEUE</span><h3>Ladder Reset</h3><p>Fresh ranked season with new placement matches and rank rewards.</p></div>
+      <div class="event reveal"><span class="tag">COMMUNITY</span><h3>Custom Game Night</h3><p>Casual community lobbies every Friday, all skill levels welcome.</p></div>
+    </div>
+  </section>
+
+  <section class="la-sec" id="leaderboard">
+    <div class="la-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);color:var(--primary2)">SEASON 7</div><h2>Live <span>leaderboard.</span></h2><p>Click a column header to sort.</p></div>
+    <div style="overflow-x:auto" class="reveal">
+      <table class="board" id="board">
+        <thead><tr>
+          <th data-key="rank">RANK <span class="arrow">▾</span></th>
+          <th data-key="player">PLAYER <span class="arrow">▾</span></th>
+          <th data-key="score">SCORE <span class="arrow">▾</span></th>
+          <th data-key="wins">WINS <span class="arrow">▾</span></th>
+          <th data-key="winrate">WIN % <span class="arrow">▾</span></th>
+        </tr></thead>
+        <tbody id="board-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="la-sec" id="rules">
+    <div class="la-head reveal"><div class="eyebrow" style="font:11px var(--font-mono);color:var(--primary2)">GOOD CONDUCT</div><h2>Community <span>rules.</span></h2></div>
+    <div class="rules reveal" data-accordion-single>
+      <div class="accordion-item"><div class="accordion-head">Respect all players <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">No harassment, hate speech or targeted abuse in chat or voice. Violations result in immediate suspension.</div></div></div>
+      <div class="accordion-item"><div class="accordion-head">No cheating or exploits <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">Use of unauthorized software, macros or known exploits results in a permanent ban from ranked play.</div></div></div>
+      <div class="accordion-item"><div class="accordion-head">Tournament check-in <span class="chev">⌄</span></div><div class="accordion-body"><div class="accordion-body-inner">Teams must check in 15 minutes before their scheduled match or forfeit their slot.</div></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="demo-footer"><span>© 2026 LEGENDS ARENA — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL COMMUNITY</span></footer>
+
+<script src="assets/demo.js"></script>
+<script>
+// particle background canvas
+(function(){
+  const canvas=DL.$('#bg-canvas'), ctx=canvas.getContext('2d');
+  let w,h,particles=[];
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  const count=matchMedia('(pointer:coarse)').matches?40:80;
+  for(let i=0;i<count;i++)particles.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.6+.4});
+  function isLight(){return document.documentElement.dataset.theme==='light'}
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    const col=isLight()?'0,120,160':'0,229,255';
+    particles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle=`rgba(${col},.7)`;ctx.fill();
+    });
+    for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
+      const a=particles[i],b=particles[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<110){ctx.strokeStyle=`rgba(${col},${.12*(1-d/110)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+// countdown timer to next Saturday 18:00
+(function(){
+  function nextTarget(){
+    const now=new Date(); const t=new Date(now);
+    t.setDate(now.getDate()+((6-now.getDay()+7)%7||7));
+    t.setHours(18,0,0,0);
+    if(t<=now)t.setDate(t.getDate()+7);
+    return t;
+  }
+  const target=nextTarget();
+  function tick(){
+    const diff=Math.max(0,target-new Date());
+    const d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;
+    DL.$('#cd-d').textContent=String(d).padStart(2,'0');
+    DL.$('#cd-h').textContent=String(h).padStart(2,'0');
+    DL.$('#cd-m').textContent=String(m).padStart(2,'0');
+    DL.$('#cd-s').textContent=String(s).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+})();
+// sortable leaderboard
+(function(){
+  const data=[
+    {player:'ShadowFang',score:2984,wins:142,winrate:71},
+    {player:'NovaBlaze',score:2871,wins:135,winrate:68},
+    {player:'ZeroKelvin',score:2790,wins:128,winrate:66},
+    {player:'PixelReign',score:2650,wins:119,winrate:64},
+    {player:'CrimsonWolf',score:2588,wins:114,winrate:62},
+    {player:'AetherDrift',score:2510,wins:108,winrate:60},
+    {player:'VoidRunner',score:2455,wins:104,winrate:58},
+    {player:'GlitchQueen',score:2390,wins:99,winrate:57},
+  ];
+  const body=DL.$('#board-body');
+  let sortKey='score', dir=-1;
+  function render(){
+    const sorted=[...data].sort((a,b)=>{
+      if(sortKey==='rank')return 0;
+      return (a[sortKey]>b[sortKey]?1:-1)*dir;
+    });
+    body.innerHTML='';
+    sorted.forEach((row,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="${i===0?'rank-1':''}">#${i+1}</td><td>${row.player}</td><td>${row.score.toLocaleString()}</td><td>${row.wins}</td><td>${row.winrate}%</td>`;
+      body.appendChild(tr);
+    });
+  }
+  DL.$$('#board th').forEach(th=>th.addEventListener('click',()=>{
+    const key=th.dataset.key;
+    if(key===sortKey)dir*=-1; else {sortKey=key;dir=-1}
+    DL.$$('#board th').forEach(t=>t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    render();
+  }));
+  render();
+})();
+</script>
+</body>
+</html>

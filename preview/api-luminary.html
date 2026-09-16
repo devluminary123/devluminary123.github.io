@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API Luminary — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#0a0d0b;--bg2:#0f1310;--card:rgba(16,22,18,.8);--text:#e6f5e9;--muted:#7f9686;
+  --line:rgba(103,255,150,.14);--primary:#5be27a;--primary2:#2fae63;--accent:#ffd166;
+  --radius:14px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#f6faf6;--bg2:#eaf3ea;--card:rgba(255,255,255,.85);--text:#0c1a10;--muted:#4c6153;--line:rgba(12,26,16,.12)}
+.al-shell{display:grid;grid-template-columns:250px 1fr;gap:0;width:min(1280px,calc(100% - 32px));margin:auto}
+.al-nav{position:sticky;top:52px;z-index:90;padding:14px 0;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.al-nav .wrap{width:min(1280px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:14px}
+.al-logo{font-weight:700;display:flex;align-items:center;gap:8px;font-family:var(--font-mono)}
+.al-logo i{color:var(--primary)}
+.al-search-top{flex:1;max-width:320px;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:13px}
+.al-burger{display:none;width:38px;height:38px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--text);font-size:17px;margin-left:auto}
+
+.al-side{border-right:1px solid var(--line);padding:26px 18px;position:sticky;top:104px;align-self:start;height:calc(100vh - 104px);overflow:auto}
+.al-side h5{font:10px var(--font-mono);color:var(--muted);letter-spacing:.14em;margin:20px 0 8px}
+.al-side h5:first-child{margin-top:0}
+.al-side a{display:block;padding:8px 10px;border-radius:8px;color:var(--muted);font-size:13.5px}
+.al-side a:hover,.al-side a.active{color:var(--text);background:rgba(91,226,122,.1)}
+.al-side .method{font:9px var(--font-mono);padding:2px 6px;border-radius:5px;margin-right:6px}
+.m-get{background:rgba(91,226,122,.18);color:var(--primary)}
+.m-post{background:rgba(255,209,102,.18);color:var(--accent)}
+.m-delete{background:rgba(255,107,138,.18);color:#ff6b8a}
+
+.al-main{padding:34px 24px 80px;max-width:820px}
+.al-main h1{font-size:36px;margin:0 0 12px}
+.al-main .lead{color:var(--muted);line-height:1.7;margin-bottom:34px}
+.al-block{margin-bottom:52px;scroll-margin-top:120px}
+.al-block h2{font-size:22px;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.al-block p{color:var(--muted);line-height:1.7;font-size:14.5px}
+
+.code-card{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card);margin:16px 0}
+.code-tabs{display:flex;border-bottom:1px solid var(--line)}
+.code-tabs button{padding:11px 16px;font:12px var(--font-mono);color:var(--muted);border-bottom:2px solid transparent}
+.code-tabs button.active{color:var(--primary);border-color:var(--primary)}
+.code-body{position:relative}
+.code-body pre{margin:0;padding:18px;overflow:auto;font:13px/1.6 var(--font-mono);color:var(--text);display:none}
+.code-body pre.active{display:block}
+.copy-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:13px}
+.copy-btn:hover{border-color:var(--primary)}
+.tok-kw{color:#c792ea}.tok-str{color:var(--primary)}.tok-fn{color:#82aaff}.tok-com{color:var(--muted)}
+
+.endpoint{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:10px;overflow:hidden}
+.ep-head{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer}
+.ep-head code{font-family:var(--font-mono);font-size:13.5px}
+.ep-head .chev{margin-left:auto;transition:transform .3s}
+.endpoint.open .chev{transform:rotate(180deg)}
+.ep-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.ep-body-inner{padding:0 16px 18px;color:var(--muted);font-size:13.5px;line-height:1.7}
+.param-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+.param-table th{text-align:left;color:var(--muted);font:10px var(--font-mono);padding:6px 8px;border-bottom:1px solid var(--line)}
+.param-table td{padding:8px;border-bottom:1px solid var(--line)}
+.param-table td:first-child{font-family:var(--font-mono);color:var(--primary)}
+.endpoint.filtered-out{display:none}
+
+@media(max-width:980px){.al-shell{grid-template-columns:1fr}.al-side{position:fixed;top:0;left:-100%;z-index:250;width:min(280px,84vw);height:100%;background:var(--bg2);transition:left .35s cubic-bezier(.2,.8,.2,1);border-right:1px solid var(--line)}.al-side.open{left:0}.al-burger{display:block}.al-search-top{display:none}}
+</style>
+</head>
+<body>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="al-nav">
+  <div class="wrap">
+    <a href="#top" class="al-logo"><i>◆</i>API Luminary</a>
+    <input class="al-search-top" id="ep-search" placeholder="Search endpoints...">
+    <button class="al-burger" data-nav-toggle="#al-sidebar" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<div class="al-shell" id="top">
+  <aside class="al-side" id="al-sidebar">
+    <h5>GETTING STARTED</h5>
+    <a href="#intro">Introduction</a>
+    <a href="#auth">Authentication</a>
+    <h5>ENDPOINTS</h5>
+    <a href="#ep-list"><span class="method m-get">GET</span>Users</a>
+    <a href="#ep-list"><span class="method m-post">POST</span>Projects</a>
+    <a href="#ep-list"><span class="method m-delete">DEL</span>Webhooks</a>
+    <h5>RESOURCES</h5>
+    <a href="#errors">Error Codes</a>
+    <a href="#sdks">SDKs</a>
+  </aside>
+
+  <main class="al-main">
+    <div class="al-block" id="intro">
+      <h1>API Luminary Docs</h1>
+      <p class="lead">A clean, fast REST API for managing users, projects and automations. Every endpoint below is documented with live-switchable code examples.</p>
+    </div>
+
+    <div class="al-block" id="auth">
+      <h2>🔑 Authentication</h2>
+      <p>Authenticate requests with a bearer token in the <code>Authorization</code> header.</p>
+      <div class="code-card">
+        <div class="code-tabs" data-tabs>
+          <button data-tab-btn="curl" class="active">cURL</button>
+          <button data-tab-btn="js">JavaScript</button>
+          <button data-tab-btn="py">Python</button>
+        </div>
+        <div class="code-body">
+          <pre class="active" data-tab-panel="curl">curl https://api.luminary.dev/v1/users \
+  -H <span class="tok-str">"Authorization: Bearer YOUR_API_KEY"</span></pre>
+          <pre data-tab-panel="js"><span class="tok-kw">const</span> res = <span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">'https://api.luminary.dev/v1/users'</span>, {
+  headers: { Authorization: <span class="tok-str">`Bearer ${API_KEY}`</span> }
+});</pre>
+          <pre data-tab-panel="py"><span class="tok-kw">import</span> requests
+r = requests.<span class="tok-fn">get</span>(<span class="tok-str">"https://api.luminary.dev/v1/users"</span>,
+  headers={<span class="tok-str">"Authorization"</span>: <span class="tok-str">f"Bearer {API_KEY}"</span>})</pre>
+          <button class="copy-btn" data-copy>⧉</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="al-block" id="ep-list">
+      <h2>📦 Endpoints</h2>
+      <p>Expand an endpoint for parameters and response details.</p>
+
+      <div class="endpoint" data-name="get users list">
+        <div class="ep-head"><span class="method m-get">GET</span><code>/v1/users</code><span class="chev">⌄</span></div>
+        <div class="ep-body"><div class="ep-body-inner">
+          Returns a paginated list of users in your workspace.
+          <table class="param-table"><tr><th>PARAM</th><th>TYPE</th><th>DESCRIPTION</th></tr>
+          <tr><td>limit</td><td>integer</td><td>Max results per page (default 20)</td></tr>
+          <tr><td>cursor</td><td>string</td><td>Pagination cursor from a previous response</td></tr></table>
+        </div></div>
+      </div>
+      <div class="endpoint" data-name="post create project">
+        <div class="ep-head"><span class="method m-post">POST</span><code>/v1/projects</code><span class="chev">⌄</span></div>
+        <div class="ep-body"><div class="ep-body-inner">
+          Creates a new project inside the authenticated workspace.
+          <table class="param-table"><tr><th>PARAM</th><th>TYPE</th><th>DESCRIPTION</th></tr>
+          <tr><td>name</td><td>string</td><td>Project display name (required)</td></tr>
+          <tr><td>visibility</td><td>string</td><td>"public" or "private" (default private)</td></tr></table>
+        </div></div>
+      </div>
+      <div class="endpoint" data-name="get project details">
+        <div class="ep-head"><span class="method m-get">GET</span><code>/v1/projects/:id</code><span class="chev">⌄</span></div>
+        <div class="ep-body"><div class="ep-body-inner">
+          Fetches full details for a single project, including members and status.
+          <table class="param-table"><tr><th>PARAM</th><th>TYPE</th><th>DESCRIPTION</th></tr>
+          <tr><td>id</td><td>string</td><td>Project ID (path parameter, required)</td></tr></table>
+        </div></div>
+      </div>
+      <div class="endpoint" data-name="delete webhook remove">
+        <div class="ep-head"><span class="method m-delete">DEL</span><code>/v1/webhooks/:id</code><span class="chev">⌄</span></div>
+        <div class="ep-body"><div class="ep-body-inner">
+          Deletes a registered webhook endpoint permanently.
+          <table class="param-table"><tr><th>PARAM</th><th>TYPE</th><th>DESCRIPTION</th></tr>
+          <tr><td>id</td><td>string</td><td>Webhook ID (path parameter, required)</td></tr></table>
+        </div></div>
+      </div>
+      <div class="endpoint" data-name="get webhook list">
+        <div class="ep-head"><span class="method m-get">GET</span><code>/v1/webhooks</code><span class="chev">⌄</span></div>
+        <div class="ep-body"><div class="ep-body-inner">
+          Lists every webhook currently registered on the workspace.
+        </div></div>
+      </div>
+      <p id="ep-empty" class="hidden" style="text-align:center;padding:20px">No endpoints match your search.</p>
+    </div>
+
+    <div class="al-block" id="errors">
+      <h2>⚠️ Error Codes</h2>
+      <table class="param-table">
+        <tr><th>CODE</th><th>MEANING</th></tr>
+        <tr><td>401</td><td>Missing or invalid API key</td></tr>
+        <tr><td>404</td><td>Resource not found</td></tr>
+        <tr><td>429</td><td>Rate limit exceeded — back off and retry</td></tr>
+      </table>
+    </div>
+
+    <div class="al-block" id="sdks">
+      <h2>🧰 SDKs</h2>
+      <p>Official SDKs are available for JavaScript, Python and Go — each generated directly from this spec, so they never drift.</p>
+    </div>
+  </main>
+</div>
+
+<footer class="demo-footer" style="width:min(1280px,calc(100% - 32px))"><span>© 2026 API LUMINARY — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL API</span></footer>
+
+<script src="assets/demo.js"></script>
+<script>
+// endpoint accordion (independent instances since class differs from shared .accordion-item)
+(function(){
+  DL.$$('.endpoint').forEach(item=>{
+    const head=item.querySelector('.ep-head'), body=item.querySelector('.ep-body');
+    head.addEventListener('click',()=>{
+      const open=item.classList.toggle('open');
+      body.style.maxHeight=open?body.scrollHeight+'px':null;
+    });
+  });
+})();
+// endpoint live search (top bar)
+(function(){
+  const input=DL.$('#ep-search'), items=DL.$$('.endpoint'), empty=DL.$('#ep-empty');
+  input.addEventListener('input',()=>{
+    const q=input.value.trim().toLowerCase();
+    let visible=0;
+    items.forEach(it=>{
+      const show=!q||it.dataset.name.includes(q)||it.textContent.toLowerCase().includes(q);
+      it.classList.toggle('filtered-out',!show);
+      if(show)visible++;
+    });
+    empty.classList.toggle('hidden',visible!==0);
+  });
+})();
+// copy code button (works for whichever tab is active)
+(function(){
+  DL.$$('[data-copy]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const active=btn.parentElement.querySelector('pre.active');
+      const text=active.innerText;
+      if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>DL.toast('Code copied to clipboard.'));
+      else DL.toast('Copy not supported in this browser.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

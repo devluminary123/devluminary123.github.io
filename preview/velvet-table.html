@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Velvet Table — Live Preview | Dev Luminary</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/demo.css">
+<style>
+:root{
+  --bg:#12090a;--bg2:#1c0f10;--card:rgba(35,18,18,.7);--text:#faf1e6;--muted:#c7ab9d;
+  --line:rgba(255,224,180,.14);--primary:#e0a95a;--primary2:#b5442e;--accent:#f2d49b;
+  --radius:16px;--font-body:'Space Grotesk',sans-serif;--font-mono:'DM Mono',monospace;
+}
+[data-theme="light"]{--bg:#fbf4ea;--bg2:#f3e5d2;--card:rgba(255,255,255,.82);--text:#241209;--muted:#7a5c48;--line:rgba(36,18,9,.13)}
+body{background:radial-gradient(circle at 80% -5%,color-mix(in srgb,var(--primary2) 22%,transparent),transparent 32%),var(--bg)}
+h1,h2,h3{font-family:'Instrument Serif',serif;font-weight:400}
+
+.ember{position:fixed;bottom:-10px;border-radius:50%;background:var(--primary);pointer-events:none;opacity:.7;filter:blur(.5px);z-index:1;animation:rise linear forwards}
+@keyframes rise{to{transform:translateY(-110vh) translateX(var(--dx));opacity:0}}
+
+.vt-nav{position:sticky;top:52px;z-index:90;padding:15px 0;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.vt-nav .wrap{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px}
+.vt-logo{font-size:22px;letter-spacing:.02em}
+.vt-links{display:flex;gap:4px;margin:auto}
+.vt-links a{padding:9px 13px;border-radius:10px;color:var(--muted);font-size:13.5px;font-family:var(--font-body)}
+.vt-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.vt-burger{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);font-size:18px}
+.vt-mobile{position:fixed;top:0;right:-100%;height:100%;width:min(300px,84vw);z-index:250;background:var(--bg2);border-left:1px solid var(--line);padding:80px 22px 22px;transition:right .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:6px}
+.vt-mobile.open{right:0}
+.vt-mobile a{padding:14px;border-radius:12px;color:var(--text);border-bottom:1px solid var(--line);font-family:var(--font-body)}
+
+.vt-hero{position:relative;z-index:2;min-height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:70px 0}
+.vt-hero .eyebrow{font:11px var(--font-mono);letter-spacing:.24em;color:var(--primary);text-transform:uppercase;font-family:var(--font-mono)}
+.vt-hero h1{font-size:clamp(48px,8vw,110px);line-height:.95;margin:18px 0;font-style:italic}
+.vt-hero p{max-width:520px;color:var(--muted);line-height:1.7;font-family:var(--font-body)}
+.vt-cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+section.vt-sec{padding:72px 0;position:relative;z-index:2}
+.vt-head{text-align:center;margin-bottom:32px}
+.vt-head h2{font-size:clamp(30px,4.5vw,50px);margin:6px 0;font-style:italic}
+.vt-head p{color:var(--muted);max-width:480px;margin:0 auto;font-family:var(--font-body)}
+
+.menu-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.menu-list{max-width:720px;margin:0 auto;display:none}
+.menu-list.active{display:block}
+.menu-item{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px dashed var(--line)}
+.menu-item h4{margin:0 0 5px;font-family:var(--font-body);font-weight:600;font-size:16px}
+.menu-item p{margin:0;color:var(--muted);font-size:13px;font-family:var(--font-body)}
+.menu-item .price{font-family:var(--font-mono);color:var(--primary);white-space:nowrap;padding-top:2px}
+
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gal-item{aspect-ratio:1;border-radius:14px;background:linear-gradient(135deg,var(--primary2),var(--primary));cursor:pointer;position:relative;overflow:hidden;transition:.3s}
+.gal-item:hover{transform:scale(1.04)}
+.gal-item:nth-child(3n+1){background:linear-gradient(135deg,var(--primary),var(--accent))}
+.gal-item:nth-child(3n+2){background:linear-gradient(135deg,var(--primary2),#7a2418)}
+
+.res-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.form-card{padding:28px;border-radius:24px;border:1px solid var(--line);background:var(--card)}
+.field{margin-bottom:15px}.field label{font:10px var(--font-mono);letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:6px}
+.field input,.field select{width:100%;padding:13px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.05);outline:none;font-family:var(--font-body)}
+.field input:focus,.field select:focus{border-color:var(--primary)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.err input,.field.err select{border-color:#ff6b6b}
+.confirm-card{padding:26px;border-radius:20px;border:1px solid var(--primary);background:color-mix(in srgb,var(--primary) 10%,var(--card));display:none}
+.confirm-card.show{display:block;animation:cs-fade .5s ease}
+@keyframes cs-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.confirm-card h3{margin:0 0 10px}
+.confirm-card p{color:var(--muted);font-family:var(--font-body);line-height:1.6;margin:0 0 4px}
+
+@media(max-width:880px){.vt-links{display:none}.vt-burger{display:block}.gallery{grid-template-columns:1fr 1fr}.res-wrap{grid-template-columns:1fr}}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}.menu-item{flex-direction:column;gap:4px}}
+</style>
+</head>
+<body>
+<div id="embers"></div>
+<header class="demo-topbar">
+  <a class="db-back" href="../preview.html">← <span class="long">Dev Luminary / Preview Lab</span></a>
+  <span class="db-tag"><i class="db-live"></i> LIVE DEMO</span>
+  <button class="db-theme" data-theme-toggle title="Toggle theme">☾</button>
+</header>
+
+<nav class="vt-nav">
+  <div class="wrap">
+    <a href="#top" class="vt-logo">Velvet Table</a>
+    <div class="vt-links"><a href="#menu">Menu</a><a href="#gallery">Gallery</a><a href="#reserve">Reservations</a><a href="#contact">Contact</a></div>
+    <a class="btn btn-primary" href="#reserve" style="padding:10px 16px;font-size:13px;font-family:var(--font-body)">Reserve a Table</a>
+    <button class="vt-burger" data-nav-toggle="#vt-mobile" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div class="vt-mobile" id="vt-mobile"><a href="#menu">Menu</a><a href="#gallery">Gallery</a><a href="#reserve">Reservations</a><a href="#contact">Contact</a></div>
+
+<main class="container" id="top">
+  <section class="vt-hero">
+    <div class="eyebrow">Fine Dining · Est. 2014</div>
+    <h1>An evening<br>worth savoring.</h1>
+    <p style="font-family:'Space Grotesk',sans-serif">Modern French-inspired cuisine, a candlelit dining room and a wine list built over a decade. Velvet Table is where celebrations happen.</p>
+    <div class="vt-cta"><a class="btn btn-primary" href="#reserve">Reserve a Table ↗</a><a class="btn btn-ghost" href="#menu">View Menu</a></div>
+  </section>
+
+  <section class="vt-sec" id="menu">
+    <div class="vt-head reveal"><div class="eyebrow" style="font-family:var(--font-mono)">THE MENU</div><h2>Seasonal &amp; considered.</h2></div>
+    <div class="menu-tabs reveal" data-tabs>
+      <button data-tab-btn="starters" class="active">Starters</button>
+      <button data-tab-btn="mains">Mains</button>
+      <button data-tab-btn="desserts">Desserts</button>
+      <button data-tab-btn="drinks">Drinks</button>
+    </div>
+    <div class="menu-list active" data-tab-panel="starters">
+      <div class="menu-item"><div><h4>Burrata &amp; Charred Fig</h4><p>Basil oil, aged balsamic, toasted sourdough</p></div><span class="price">$18</span></div>
+      <div class="menu-item"><div><h4>Tuna Tartare</h4><p>Avocado, citrus soy, crispy shallots</p></div><span class="price">$22</span></div>
+      <div class="menu-item"><div><h4>Roasted Beet Salad</h4><p>Whipped goat cheese, candied walnuts, mint</p></div><span class="price">$16</span></div>
+    </div>
+    <div class="menu-list" data-tab-panel="mains">
+      <div class="menu-item"><div><h4>Pan-Seared Duck Breast</h4><p>Cherry gastrique, parsnip purée, charred broccolini</p></div><span class="price">$38</span></div>
+      <div class="menu-item"><div><h4>Wild Mushroom Risotto</h4><p>Truffle oil, parmesan crisp, herb oil</p></div><span class="price">$29</span></div>
+      <div class="menu-item"><div><h4>Grilled Ribeye</h4><p>Red wine jus, confit garlic, seasonal greens</p></div><span class="price">$46</span></div>
+    </div>
+    <div class="menu-list" data-tab-panel="desserts">
+      <div class="menu-item"><div><h4>Dark Chocolate Fondant</h4><p>Salted caramel, vanilla bean ice cream</p></div><span class="price">$14</span></div>
+      <div class="menu-item"><div><h4>Lemon Tart</h4><p>Torched meringue, raspberry coulis</p></div><span class="price">$12</span></div>
+    </div>
+    <div class="menu-list" data-tab-panel="drinks">
+      <div class="menu-item"><div><h4>Velvet Old Fashioned</h4><p>House bourbon, smoked orange, bitters</p></div><span class="price">$17</span></div>
+      <div class="menu-item"><div><h4>Sommelier's Pairing</h4><p>Three-glass pairing curated nightly</p></div><span class="price">$32</span></div>
+    </div>
+  </section>
+
+  <section class="vt-sec" id="gallery">
+    <div class="vt-head reveal"><div class="eyebrow" style="font-family:var(--font-mono)">GALLERY</div><h2>A room built for the moment.</h2></div>
+    <div class="gallery reveal" id="gallery-grid">
+      <div class="gal-item" data-label="The Dining Room"></div><div class="gal-item" data-label="Chef's Plating"></div>
+      <div class="gal-item" data-label="The Bar"></div><div class="gal-item" data-label="Private Terrace"></div>
+      <div class="gal-item" data-label="Wine Cellar"></div><div class="gal-item" data-label="Dessert Course"></div>
+      <div class="gal-item" data-label="Evening Ambience"></div><div class="gal-item" data-label="Chef's Table"></div>
+    </div>
+  </section>
+
+  <section class="vt-sec" id="reserve">
+    <div class="vt-head reveal"><div class="eyebrow" style="font-family:var(--font-mono)">RESERVATIONS</div><h2>Book your table.</h2></div>
+    <div class="res-wrap">
+      <form class="form-card reveal" id="res-form" novalidate>
+        <div class="field-row">
+          <div class="field" id="f-name"><label>NAME</label><input type="text" id="res-name" placeholder="Full name"></div>
+          <div class="field" id="f-guests"><label>GUESTS</label><select id="res-guests"><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="f-date"><label>DATE</label><input type="date" id="res-date"></div>
+          <div class="field" id="f-time"><label>TIME</label><input type="time" id="res-time"></div>
+        </div>
+        <div class="field" id="f-email"><label>EMAIL</label><input type="email" id="res-email" placeholder="you@email.com"></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Confirm Reservation ↗</button>
+      </form>
+      <div class="confirm-card" id="confirm-card">
+        <h3>Table reserved 🍷</h3>
+        <p id="confirm-line1"></p>
+        <p id="confirm-line2"></p>
+        <p style="margin-top:14px;font-size:12px;color:var(--muted)">This is a demo confirmation — no real reservation has been made.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="demo-footer" id="contact"><span>© 2026 VELVET TABLE — DEMO SITE BY DEV LUMINARY</span><span>THIS IS A LIVE UI PREVIEW · NOT A REAL RESTAURANT</span></footer>
+
+<div class="dl-modal" id="gal-modal"><div class="dl-modal-box"><button class="dl-modal-close" data-modal-close>×</button><div style="aspect-ratio:16/10;border-radius:14px;background:linear-gradient(135deg,var(--primary2),var(--primary));margin-bottom:14px"></div><h3 id="gal-title" style="margin:0"></h3></div></div>
+
+<script src="assets/demo.js"></script>
+<script>
+// rising embers
+(function(){
+  const wrap=DL.$('#embers');
+  setInterval(()=>{
+    const e=document.createElement('div');e.className='ember';
+    const size=2+Math.random()*4;
+    e.style.width=e.style.height=size+'px';
+    e.style.left=Math.random()*100+'vw';
+    e.style.setProperty('--dx',(Math.random()*80-40)+'px');
+    e.style.animationDuration=(6+Math.random()*5)+'s';
+    wrap.appendChild(e);
+    setTimeout(()=>e.remove(),12000);
+  },500);
+})();
+// menu tabs -> show matching panel
+(function(){
+  DL.$$('[data-tab-btn]').forEach(b=>b.addEventListener('click',()=>{
+    DL.$$('.menu-list').forEach(l=>l.classList.toggle('active',l.dataset.tabPanel===b.dataset.tabBtn));
+  }));
+})();
+// gallery lightbox
+(function(){
+  const modal=DL.$('#gal-modal');
+  DL.$$('.gal-item').forEach(g=>g.addEventListener('click',()=>{DL.$('#gal-title').textContent=g.dataset.label;modal.classList.add('open')}));
+})();
+// reservation form
+(function(){
+  const form=DL.$('#res-form');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    let ok=true;
+    const req=[['f-name','res-name'],['f-guests','res-guests'],['f-date','res-date'],['f-time','res-time'],['f-email','res-email']];
+    req.forEach(([wrapId,inputId])=>{
+      const el=DL.$('#'+inputId), bad=!el.value.trim();
+      DL.$('#'+wrapId).classList.toggle('err',bad);
+      if(bad)ok=false;
+    });
+    const email=DL.$('#res-email').value.trim();
+    if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){DL.$('#f-email').classList.add('err');ok=false}
+    if(!ok)return;
+    const name=DL.$('#res-name').value.trim(),guests=DL.$('#res-guests').value,date=DL.$('#res-date').value,time=DL.$('#res-time').value;
+    DL.$('#confirm-line1').textContent=`${name} · Party of ${guests}`;
+    DL.$('#confirm-line2').textContent=`${new Date(date+'T'+time).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})} at ${time}`;
+    DL.$('#confirm-card').classList.add('show');
+    DL.toast('Reservation confirmed — check the card on the right.');
+    form.reset();
+  });
+})();
+</script>
+</body>
+</html>
